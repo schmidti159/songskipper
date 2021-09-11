@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1631369636232-1" author="Daniel (generated)">
+        <createTable tableName="user">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="refresh_token" type="VARCHAR(255)"/>
+            <column name="expires_in" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1631369636232-2" author="Daniel (generated)">
+        <addUniqueConstraint columnNames="id" constraintName="uc_user_id" tableName="user"/>
+    </changeSet>
+
+</databaseChangeLog>
