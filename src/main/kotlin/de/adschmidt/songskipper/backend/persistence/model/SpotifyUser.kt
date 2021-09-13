@@ -1,0 +1,16 @@
+package de.adschmidt.songskipper.backend.persistence.model
+
+import java.time.Instant
+import javax.persistence.Entity
+import javax.persistence.Id
+
+@Entity
+class SpotifyUser(
+    @Id
+    val id : String? = null,
+    var accessToken : String? = null,
+    var accessTokenExpiresAt: Instant? = null,
+    var refreshToken : String? = null
+) {
+
+}

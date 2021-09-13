@@ -16,7 +16,7 @@ spring:
             #client-id: <see application-secrets.yml>
             #client-secret: <see application-secrets.yml>
             authorization-grant-type: authorization_code
-            scope: user-read-private, user-read-email, user-top-read
+            scope: user-read-private, user-read-email, user-read-currently-playing, user-modify-playback-state
             redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
             client-authentication-method: basic
             authentication-scheme: query
@@ -26,4 +26,4 @@ spring:
             token-uri: https://accounts.spotify.com/api/token
             authorization-uri: https://accounts.spotify.com/authorize
             user-info-uri: https://api.spotify.com/v1/me
-            userNameAttribute: email
+            userNameAttribute: id

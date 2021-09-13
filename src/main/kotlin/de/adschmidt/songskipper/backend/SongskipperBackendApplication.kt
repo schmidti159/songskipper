@@ -3,6 +3,7 @@ package de.adschmidt.songskipper.backend
 import com.wrapper.spotify.SpotifyApi
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
@@ -14,25 +15,8 @@ import java.security.Principal
 
 
 @SpringBootApplication
-@RestController
+@EnableScheduling
 class SongskipperBackendApplication {
-	@GetMapping("/top-artists")
-	fun userInfo(user: Principal,
-//				 clientService: OAuth2AuthorizedClientService,
-				 @RegisteredOAuth2AuthorizedClient authClient : OAuth2AuthorizedClient
-	) : String {
-//		val token = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
-//		val client: OAuth2AuthorizedClient = clientService.loadAuthorizedClient(
-//			token.authorizedClientRegistrationId,
-//			token.name
-//		)
-		val topArtists = SpotifyApi.Builder()
-			.setAccessToken(authClient.accessToken.tokenValue)
-			.build()
-			.usersTopArtists.build().execute().items
-			.map {it.name}
-		return topArtists.toString()
-	}
 }
 
 fun main(args: Array<String>) {

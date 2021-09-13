@@ -13,18 +13,19 @@
 </head>
 <body>
     <div class="container">
-
-        <div class="jumbotron">
-            <h1 class="display-4">Song Skipper for Spotify</h1>
-            <p class="lead">Song Skipper skips tracks from specific artists or based on keywords in the track name (e.g live versions).</p>
-
-            <div class="alert alert-warning" role="alert">
-                <h5 class="alert-heading">Alpha State</h5>
-                <p>This application is currently in alpha state.
-                If you want to try it please contact me at daniel-songskipper (at) ad-schmidt (dot) de.</p>
+        <div class="card" id="current-track">
+            <div class="card-header">
+                Currently Playing
             </div>
-            <p class="lead">
-                <a href="/app.html" class="btn btn-primary btn-lg" role="button">Start Song Skipper</a>
+            <div class="card-body">
+                <h5 class="card-title" id="current-track-title">Song Title</h5>
+                <p class="card-text" id=current-track-subtitle">Artist - Album</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">1:42 / 3:14</div>
+                </div>
+            </div>
+            <p>
+                <a href="#" class="btn" role="button">Skip</a>
             </p>
         </div>
     </div>

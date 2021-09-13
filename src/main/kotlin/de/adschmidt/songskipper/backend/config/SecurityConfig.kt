@@ -1,5 +1,6 @@
 package de.adschmidt.songskipper.backend.config
 
+import de.adschmidt.songskipper.backend.spotify.SpotifyUserUpdateFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -12,6 +13,7 @@ import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 
 
@@ -48,18 +50,20 @@ class SecurityConfig {
     }
 
     @Configuration
-    class DefaultSecurityConfig : WebSecurityConfigurerAdapter() {
-        @Bean
-        fun encoder(): PasswordEncoder? {
-            return BCryptPasswordEncoder()
-        }
+    class DefaultSecurityConfig(
+        val spotifyUserUpdateFilter : SpotifyUserUpdateFilter
+    ) : WebSecurityConfigurerAdapter() {
 
         override fun configure(http: HttpSecurity?) {
             http {
                 oauth2Login { }
                 authorizeRequests {
+                    authorize("/", permitAll)
+                    authorize("/error", permitAll)
+                    authorize("/webjars/**", permitAll)
                     authorize(anyRequest, authenticated)
                 }
+                addFilterAfter<OAuth2LoginAuthenticationFilter>(spotifyUserUpdateFilter)
             }
         }
     }
