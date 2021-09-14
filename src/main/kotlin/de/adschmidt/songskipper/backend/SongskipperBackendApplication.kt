@@ -15,7 +15,6 @@ import java.security.Principal
 
 
 @SpringBootApplication
-@EnableScheduling
 class SongskipperBackendApplication {
 }
 

@@ -1,20 +1,17 @@
 package de.adschmidt.songskipper.backend.api.v1
 
 import de.adschmidt.songskipper.backend.Loggable
-import de.adschmidt.songskipper.backend.logger
-import de.adschmidt.songskipper.backend.persistence.model.SpotifyUser
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
-import de.adschmidt.songskipper.backend.services.SpotifySkipperService
+import de.adschmidt.songskipper.backend.services.SkipperService
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.Instant
 
 @RestController()
 @RequestMapping("/api/v1/")
 class SongSkipperAPIV1(
-    private val skipperService: SpotifySkipperService,
+    private val skipperService: SkipperService,
     private val spotifyUserRepo: SpotifyUserRepo
 ) : Loggable {
 
