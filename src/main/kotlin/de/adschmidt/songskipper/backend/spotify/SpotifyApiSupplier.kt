@@ -1,16 +1,14 @@
 package de.adschmidt.songskipper.backend.spotify
 
 import com.wrapper.spotify.SpotifyApi
-import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.logger
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUser
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import kotlinx.coroutines.future.await
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
+import java.lang.Integer.min
 import java.time.Instant
 import java.time.temporal.ChronoUnit.*
 
@@ -37,9 +35,8 @@ class SpotifyApiSupplier(
     }
 
     private suspend fun refreshTokenIfNeeded(user : SpotifyUser) {
-        if(user.accessTokenExpiresAt != null &&
-            Instant.now().plus(10, MINUTES)
-                .isBefore(user.accessTokenExpiresAt)) {
+        if(user.refreshAt != null &&
+            Instant.now().isBefore(user.refreshAt)) {
             // token is valid at least another 10 minutes
             return
         }
@@ -48,14 +45,24 @@ class SpotifyApiSupplier(
         }
         logger().info("Refreshing the access token for {}",user.id)
 
-        val refreshTokenResponse = SpotifyApi.builder().build().authorizationCodeRefresh().refresh_token(user.refreshToken).build()
-            .executeAsync().await()
-        user.accessToken = refreshTokenResponse.accessToken
-        user.accessTokenExpiresAt = Instant.now().plus(refreshTokenResponse.expiresIn.toLong(), SECONDS)
-        user.refreshToken = refreshTokenResponse.refreshToken
+        val newToken = SpotifyApi.builder()
+                .setClientId(clientId)
+                .setClientSecret(clientSecret)
+                .setRefreshToken(user.refreshToken)
+                .build()
+                .authorizationCodeRefresh()
+                .build()
+                .executeAsync().await()
+        user.accessToken = newToken.accessToken
+        // refresh the token when only half its lifetime is left or if 10 min are left, whichever is smaller
+        val refreshTokenWithRemaining = min(newToken.expiresIn/2, 10 * 60)
+        user.refreshAt = Instant.now().plus((newToken.expiresIn - refreshTokenWithRemaining).toLong(), SECONDS)
+        if(newToken.refreshToken != null) {
+            user.refreshToken = newToken.refreshToken
+        }
         spotifyUserRepo.save(user)
 
-        logger().info("The new access token for {} is valid until {}", user.id, user.accessTokenExpiresAt)
+        logger().info("The new access token for {} will be refreshed at {}", user.id, user.refreshAt)
     }
 
 

@@ -18,9 +18,14 @@ class SpotifySkipperService(
         taskScheduler.schedule(SkipperTask(userId), Instant.now())
     }
 
+    fun stopSkipping(userId: String) {
+        throw UnsupportedOperationException("Not implemented yet")
+    }
+
     fun skipSong(userId: String, track : IPlaylistItem) : Boolean {
         return track.name.contains("live", ignoreCase = true)
     }
+
 
     inner class SkipperTask(private val userId: String) : Runnable {
 

@@ -9,7 +9,7 @@ class SpotifyUser(
     @Id
     val id : String? = null,
     var accessToken : String? = null,
-    var accessTokenExpiresAt: Instant? = null,
+    var refreshAt: Instant? = null,
     var refreshToken : String? = null
 ) {
 

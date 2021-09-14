@@ -13,6 +13,7 @@ import org.springframework.web.filter.GenericFilterBean
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
+import java.time.temporal.ChronoUnit.*
 
 /**
  * This filter reads the authenticated user and his tokens from the context and
@@ -35,16 +36,14 @@ class SpotifyUserUpdateFilter(
                     authentication.authorizedClientRegistrationId,
                     authentication.name
                 )
-                if (user.accessTokenExpiresAt == null || user.accessTokenExpiresAt!!.isBefore(client.accessToken.expiresAt)) {
+                // refresh 10 min before it expires
+                val newRefreshAt = client.accessToken.expiresAt?.minus(10, MINUTES)
+                if (newRefreshAt != null && (user.refreshAt == null || user.refreshAt!!.isBefore(newRefreshAt))) {
                     user.accessToken = client.accessToken.tokenValue
-                    user.accessTokenExpiresAt = client.accessToken.expiresAt
+                    user.refreshAt = newRefreshAt
                     user.refreshToken = client.refreshToken?.tokenValue ?: user.refreshToken
                     spotifyUserRepo.save(user)
-                    logger().info(
-                        "updated user from context: {}, access token expires at: {}",
-                        user.id,
-                        user.accessTokenExpiresAt
-                    )
+                    logger().info("updated user from context: {}, access token will be refreshed at: {}", user.id, user.refreshAt)
                 }
             }
         }
