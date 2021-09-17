@@ -20,6 +20,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
 	//implementation("org.springframework.boot:spring-boot-starter-quartz")
 	implementation("org.webjars:jquery:3.6.0")
 	implementation("org.webjars:bootstrap:5.1.0")
@@ -35,6 +36,7 @@ dependencies {
 	implementation("se.michaelthelin.spotify:spotify-web-api-java:6.5.4")
 	implementation("org.slf4j:slf4j-api")
 	implementation("org.liquibase:liquibase-core")
+	implementation("org.springdoc:springdoc-openapi-ui:1.5.10")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 }
