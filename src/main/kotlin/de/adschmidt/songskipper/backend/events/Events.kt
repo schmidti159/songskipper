@@ -20,15 +20,19 @@ class CurrentTrackEvent(
             return "CurrentTrack[nothing]"
         }
         val playing = if(isPlaying) {"playing"} else {"paused"}
-        var artistNames = track.artists.map{ it.name }
-        var artists = if(artistNames.size==1) {
-            artistNames[0].toString()
-        } else {
-            artistNames.toString()
-        }
         val progress = "(${progressMs/1000}/${track.durationMs/1000})"
-        return "CurrentTrack['${track.name}' from $artists on ${track.album.name} $progress, $playing]"
+        return "[${track.toSimpleString()} $progress, $playing]"
     }
+}
+
+fun Track.toSimpleString(): String {
+    val artistNames = artists.map{ it.name }
+    val artistsString = if(artistNames.size==1) {
+        "'${artistNames[0].toString()}'"
+    } else {
+        artistNames.toString()
+    }
+    return "'$name' from $artistsString on '${album.name}'"
 }
 
 class SkipEvent(
@@ -46,6 +50,6 @@ class EventLogger: Loggable {
 
     @EventListener
     fun onApplicationEvent(event: SkipEvent) {
-        logger().info("skipped: {}", event.track)
+        logger().info("skipped: {}", event.track?.toSimpleString())
     }
 }
