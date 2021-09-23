@@ -25,6 +25,8 @@ dependencies {
 	implementation("org.webjars:jquery:3.6.0")
 	implementation("org.webjars:bootstrap:5.1.0")
 	implementation("org.webjars:webjars-locator-core")
+	implementation("org.webjars:sockjs-client:1.0.2")
+	implementation("org.webjars:stomp-websocket:2.3.3")
 	implementation("com.h2database:h2")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

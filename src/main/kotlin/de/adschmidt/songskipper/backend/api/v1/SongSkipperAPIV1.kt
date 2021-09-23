@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.security.Principal
 
 @RestController()
 @RequestMapping("/api/v1/")
@@ -22,6 +23,11 @@ class SongSkipperAPIV1(
     @GetMapping("/skipper/stop") // TODO move (use just for testing)
     suspend fun stopSkipping() {
         skipperService.stopSkipping(getCurrentUserId())
+    }
+
+    @GetMapping("/user/id")
+    suspend fun getUserId(principal: Principal): String {
+        return getCurrentUserId()
     }
 
     private fun getCurrentUserId() : String {

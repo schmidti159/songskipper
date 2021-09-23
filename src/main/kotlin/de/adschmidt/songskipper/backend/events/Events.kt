@@ -44,12 +44,12 @@ class SkipEvent(
 @Component
 class EventLogger: Loggable {
     @EventListener
-    fun onApplicationEvent(event: CurrentTrackEvent) {
+    fun onCurrentTrackEvent(event: CurrentTrackEvent) {
         logger().info("current track: {}", event)
     }
 
     @EventListener
-    fun onApplicationEvent(event: SkipEvent) {
+    fun onSkipEvent(event: SkipEvent) {
         logger().info("skipped: {}", event.track?.toSimpleString())
     }
 }
