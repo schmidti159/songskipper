@@ -40,8 +40,8 @@ class SkipperService(
 
     fun skipTrack(track: Track?): Boolean {
         return track != null && (
-                track.name.contains("live", ignoreCase = true) ||
-                track.album.name.contains("live", ignoreCase = true))
+                track.name.contains("\\blive\\b".toRegex(RegexOption.IGNORE_CASE)) ||
+                track.album.name.contains("\\blive\\b".toRegex(RegexOption.IGNORE_CASE)))
     }
 
     inner class SkipperTask(private val userId: String) {
@@ -77,6 +77,7 @@ class SkipperService(
             if(skipTrack(track)) {
                 applicationEventPublisher.publishEvent(SkipEvent(this, userId, track))
                 spotifyService.skip(userId)
+                return 1
             }
             return if(remaining < 10) { 1 } else { 5 }
         }
