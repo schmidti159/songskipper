@@ -6,15 +6,14 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.web.servlet.invoke
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import java.util.*
 
 
 @EnableWebSecurity
@@ -27,7 +26,7 @@ class SecurityConfig {
     @Order(1)
     @Profile("dev")
     class H2ConsoleSecurityConfig : WebSecurityConfigurerAdapter() {
-//        override fun configure(web: WebSecurity) {
+        //        override fun configure(web: WebSecurity) {
 //            web.ignoring().antMatchers("/h2/**")
 //        }
         override fun configure(http: HttpSecurity?) {
@@ -59,12 +58,27 @@ class SecurityConfig {
                 oauth2Login { }
                 authorizeRequests {
                     authorize("/", permitAll)
+                    authorize("/static/**", permitAll)
+                    authorize("/ws/**", permitAll)
+                    authorize("/*", permitAll)
                     authorize("/error", permitAll)
-                    authorize("/webjars/**", permitAll)
                     authorize(anyRequest, authenticated)
+//                    authorize(anyRequest, permitAll)
                 }
                 addFilterAfter<OAuth2LoginAuthenticationFilter>(spotifyUserUpdateFilter)
+                cors {
+                    disable()
+                }
             }
+        }
+
+        @Bean
+        fun corsConfigurationSource(): CorsConfigurationSource? {
+            val configuration = CorsConfiguration()
+            configuration.allowedOrigins = listOf(CorsConfiguration.ALL)
+            val source = UrlBasedCorsConfigurationSource()
+            source.registerCorsConfiguration("/**", configuration)
+            return source
         }
     }
 }

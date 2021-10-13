@@ -1,8 +1,7 @@
 package de.adschmidt.songskipper.backend.api
 
 import de.adschmidt.songskipper.backend.Loggable
-import de.adschmidt.songskipper.backend.events.CurrentTrackEvent
-import de.adschmidt.songskipper.backend.events.CurrentTrackMessage
+import de.adschmidt.songskipper.backend.events.*
 import de.adschmidt.songskipper.backend.logger
 import org.springframework.context.event.EventListener
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -17,17 +16,10 @@ class ClientWebSocketController(
     val messagingTemplate: SimpMessagingTemplate
 ): Loggable {
 
-
     @EventListener
     fun onApplicationEvent(event: CurrentTrackEvent) {
-        if(event.track == null) {
-            return
-        }
-        val t = event.track
-        val msg = CurrentTrackMessage(t.name, t.externalUrls["spotify"],
-            t.artists.map{it -> it.name}, t.artists.map{it -> it.externalUrls["spotify"]},
-            t.album.name, t.album.externalUrls["spotify"], t.album.images[0].url,
-            t.durationMs, event.progressMs)
+        val track = if(event.track != null) Track(event.track) else null
+        val msg = CurrentlyPlayingMessage(track, event.progressMs, !event.isPlaying)
         messagingTemplate.convertAndSendToUser(event.userId, "/queue/messages", msg)
     }
 
