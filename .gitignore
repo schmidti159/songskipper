@@ -33,15 +33,9 @@ out/
 /backend/src/main/resources/application-secrets.yml
 
 # dependencies
-/frontend/node_modules
-/frontend/.pnp
+node_modules
+.pnp
 .pnp.js
-
-# testing
-/frontend/coverage
-
-# production
-/frontend/build
 
 # misc
 .DS_Store
@@ -54,6 +48,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# maven (incl. maven-frontend-plugin)
-frontend/node
-target
+# Ignore Gradle build output directory
+build
