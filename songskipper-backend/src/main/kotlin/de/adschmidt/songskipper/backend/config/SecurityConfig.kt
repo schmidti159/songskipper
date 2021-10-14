@@ -57,12 +57,10 @@ class SecurityConfig {
             http {
                 oauth2Login { }
                 authorizeRequests {
-                    authorize("/", permitAll)
-                    authorize("/static/**", permitAll)
-                    authorize("/ws/**", permitAll)
-                    authorize("/*", permitAll)
-                    authorize("/error", permitAll)
-                    authorize(anyRequest, authenticated)
+                    authorize("/api/public/**", permitAll)
+                    authorize("/api/**", authenticated)
+                    authorize("/login", authenticated)
+                    authorize(anyRequest, permitAll)
 //                    authorize(anyRequest, permitAll)
                 }
                 addFilterAfter<OAuth2LoginAuthenticationFilter>(spotifyUserUpdateFilter)

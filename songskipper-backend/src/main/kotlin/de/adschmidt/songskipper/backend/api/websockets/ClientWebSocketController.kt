@@ -1,4 +1,4 @@
-package de.adschmidt.songskipper.backend.api
+package de.adschmidt.songskipper.backend.api.websockets
 
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.events.*
