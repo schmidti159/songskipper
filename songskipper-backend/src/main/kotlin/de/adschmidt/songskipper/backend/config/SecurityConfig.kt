@@ -59,7 +59,6 @@ class SecurityConfig {
                 authorizeRequests {
                     authorize("/api/public/**", permitAll)
                     authorize("/api/**", authenticated)
-                    authorize("/login", authenticated)
                     authorize(anyRequest, permitAll)
 //                    authorize(anyRequest, permitAll)
                 }

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import currentlyPlayingReducer from '../features/currentlyPlaying/currentlyPlayingSlice'
+import loginReducer from '../features/login/loginSlice'
 
 export const store = configureStore({
   reducer: {
-    currentlyPlaying: currentlyPlayingReducer
+    currentlyPlaying: currentlyPlayingReducer,
+    login: loginReducer
   }
 })
 

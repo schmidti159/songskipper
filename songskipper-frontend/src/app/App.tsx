@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import PageFrame from '../features/frame/PageFrame';
 import CurrentlyPlayingPage from '../features/currentlyPlaying/CurrentlyPlayingPage';
@@ -9,28 +8,43 @@ import RuleIcon from '@mui/icons-material/Rule';
 import HistoryIcon from '@mui/icons-material/History';
 import { useAppDispatch } from './hooks'
 import connectWebsocket from '../api/WebSocketSubscriber';
-
+import { Route, Switch } from 'react-router-dom';
+import LoginContainer from '../features/login/LoginContainer';
 
 function App() {
   connectWebsocket(useAppDispatch());
   return (
-      <PageFrame pages={[
+    <LoginContainer>
+      <PageFrame links={[
         {
+          path: "/",
           title: "Currently Playing",
-          icon: <PlayArrowIcon />,
-          content: <CurrentlyPlayingPage/>
+          icon: <PlayArrowIcon />
         },
         {
+          path: "/rules",
           title: "Skip Rules",
-          icon: <RuleIcon />,
-          content: <SkipRules/>
+          icon: <RuleIcon />
         },
         {
+          path: "/log",
           title: "PlayLog",
-          icon: <HistoryIcon />,
-          content: <PlayLog/>
+          icon: <HistoryIcon />
         }
-      ]}/>
+      ]}>
+        <Switch>
+          <Route path="/rules">
+            <SkipRules />
+          </Route>
+          <Route path="/log">
+            <PlayLog/>
+          </Route>
+          <Route path="/">
+            <CurrentlyPlayingPage/>
+          </Route>
+        </Switch>
+      </PageFrame>
+    </LoginContainer>
   );
 }
 

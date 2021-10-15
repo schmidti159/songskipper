@@ -17,6 +17,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
+import { NavLink } from 'react-router-dom';
+
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -89,21 +91,18 @@ const mdTheme = createTheme(
 );
 
 interface PageFrameProps {
-  pages: {
+  links: {
+    path: string,
     title: string,
-    icon: React.ReactNode,
-    content: React.ReactNode
-  }[]
+    icon: React.ReactNode
+  }[],
+  children: React.ReactNode
 }
 
 export default function PageFrame(props: PageFrameProps) {
   const [open, setOpen] = React.useState(window.innerWidth > 768);
-  const [activePageId, setActivePageId] = React.useState(0);
   const toggleDrawer = () => {
     setOpen(!open);
-  };
-  const openPage = (id: number) => {
-    setActivePageId(id);
   }
 
   return (
@@ -154,15 +153,13 @@ export default function PageFrame(props: PageFrameProps) {
           </Toolbar>
           <Divider />
           <List>
-            {props.pages.map( (page, i) => 
-              <ListItem button 
-                  key={i.toString()} 
-                  onClick={() => openPage(i)}
-                  selected={activePageId === i}>
+            {props.links.map( (link, i) => 
+              <ListItem button component={NavLink} key={i.toString()}
+                  to={link.path} activeClassName="Mui-selected" exact>
                 <ListItemIcon>
-                  {page.icon}
+                  {link.icon}
                 </ListItemIcon>
-                <ListItemText primary={page.title} />
+                <ListItemText primary={link.title} />
               </ListItem>
             )}
           </List>
@@ -181,7 +178,7 @@ export default function PageFrame(props: PageFrameProps) {
         >
           <Toolbar /> {/*empty Toolbar to have the correct distance to the top */}
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {props.pages[activePageId].content}
+            {props.children}
             <Copyright sx={{ pt: 4 }} />
           </Container>
           

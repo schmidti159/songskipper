@@ -8,16 +8,12 @@ export default function connectWebsocket(dispatch: any) {
     const stompClient = new Client({
         webSocketFactory: function () {
             return new SockJS('http://'+document.location.host+'/ws');
-        },
-        debug: function (str) {
-          console.log(str);
-        },
+        }
     });
     stompClient.onConnect = frame => {
         console.log('Connected: '+frame);
         stompClient.subscribe('/users/queue/messages', message => {
             const currentlyPlaying = JSON.parse(message.body)
-            console.log(currentlyPlaying);
             dispatch(currentlyPlayingMessage(currentlyPlaying))
         });
     };
