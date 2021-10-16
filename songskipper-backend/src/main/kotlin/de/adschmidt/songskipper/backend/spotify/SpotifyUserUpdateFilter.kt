@@ -1,9 +1,11 @@
 package de.adschmidt.songskipper.backend.spotify
 
 import de.adschmidt.songskipper.backend.Loggable
+import de.adschmidt.songskipper.backend.events.UserChangedEvent
 import de.adschmidt.songskipper.backend.logger
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUser
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
@@ -22,7 +24,8 @@ import java.time.temporal.ChronoUnit.*
 @Component
 class SpotifyUserUpdateFilter(
     private val spotifyUserRepo: SpotifyUserRepo,
-    private val clientService: OAuth2AuthorizedClientService
+    private val clientService: OAuth2AuthorizedClientService,
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) : GenericFilterBean(), Loggable {
 
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
@@ -43,7 +46,8 @@ class SpotifyUserUpdateFilter(
                     user.refreshAt = newRefreshAt
                     user.refreshToken = client.refreshToken?.tokenValue ?: user.refreshToken
                     spotifyUserRepo.save(user)
-                    logger().info("updated user from context: {}, access token will be refreshed at: {}", user.id, user.refreshAt)
+                    applicationEventPublisher.publishEvent(UserChangedEvent(this, user.id))
+                    //logger().info("updated user from context: {}, access token will be refreshed at: {}", user.id, user.refreshAt)
                 }
             }
         }

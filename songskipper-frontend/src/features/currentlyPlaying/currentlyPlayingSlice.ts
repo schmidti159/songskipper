@@ -18,7 +18,6 @@ const initialState: CurrentlyPlayingState = {
 
 export const currentlyPlayingSlice = createSlice({
   name: 'currentlyPlaying',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     currentlyPlayingMessage: (state, action: PayloadAction<CurrentlyPlayingState>) => {
@@ -30,7 +29,8 @@ export const currentlyPlayingSlice = createSlice({
 
 export const { currentlyPlayingMessage } = currentlyPlayingSlice.actions
 
-// Other code such as selectors can use the imported `RootState` type
 export const selectCurrentlyPlayingTrack = (state: RootState) => state.currentlyPlaying.track
+export const selectCurrentlyPlayingProgress = (state: RootState) => state.currentlyPlaying.progressMs || 0
+export const selectCurrentlyPlayingIsPaused = (state: RootState) => state.currentlyPlaying.isPaused
 
 export default currentlyPlayingSlice.reducer

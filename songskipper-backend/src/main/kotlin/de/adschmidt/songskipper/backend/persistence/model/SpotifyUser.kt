@@ -10,7 +10,8 @@ class SpotifyUser(
     val id : String? = null,
     var accessToken : String? = null,
     var refreshAt: Instant? = null,
-    var refreshToken : String? = null
+    var refreshToken : String? = null,
+    var skipperActive : Boolean = false
 ) {
 
 }

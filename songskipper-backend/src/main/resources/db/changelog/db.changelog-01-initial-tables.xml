@@ -13,6 +13,7 @@
             <column name="access_token" type="VARCHAR(255)"/>
             <column name="refresh_at" type="DATETIME"/>
             <column name="refresh_token" type="VARCHAR(255)"/>
+            <column name="skipper_active" type="BOOLEAN"/>
         </createTable>
     </changeSet>
 

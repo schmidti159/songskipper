@@ -19,11 +19,15 @@ class SkipperApiV1(
 
     @GetMapping("/start")
     suspend fun startSkipping() {
-        skipperService.startSkipping(userService.verifyUserId())
+        skipperService.setSkipperState(userService.verifyUserId(), true)
     }
     @GetMapping("/stop")
     suspend fun stopSkipping() {
-        skipperService.stopSkipping(userService.verifyUserId())
+        skipperService.setSkipperState(userService.verifyUserId(), false)
+    }
+    @GetMapping("/active")
+    suspend fun active(): Boolean {
+        return skipperService.skipperActive(userService.verifyUserId())
     }
 
 }

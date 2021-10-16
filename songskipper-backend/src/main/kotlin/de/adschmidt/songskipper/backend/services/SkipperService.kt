@@ -4,39 +4,53 @@ import com.wrapper.spotify.model_objects.specification.Track
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.events.CurrentTrackEvent
 import de.adschmidt.songskipper.backend.events.SkipEvent
+import de.adschmidt.songskipper.backend.events.UserChangedEvent
 import de.adschmidt.songskipper.backend.logger
+import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import kotlinx.coroutines.*
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
 class SkipperService(
     private val spotifyService: SpotifyService,
+    private val userRepo: SpotifyUserRepo,
     private val applicationEventPublisher: ApplicationEventPublisher
 ) : Loggable {
 
-    private val tasksByUserId = mutableMapOf<String, SkipperTask>()
+    private val tasksByUserId = mutableMapOf<String, CurrentSongUpdaterTask>()
+
+    fun setSkipperState(userId : String, skipperActive : Boolean) {
+        val user = userRepo.findById(userId)
+            .orElseThrow { IllegalStateException("User with id '$userId' does not exist in DB!") }
+        user.skipperActive = skipperActive
+        userRepo.save(user)
+
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun startSkipping(userId : String) {
-        if(tasksByUserId.contains(userId)) {
-            logger().info("Skipper for {} is already running.", userId)
+    @EventListener
+    fun userIdChanged(event: UserChangedEvent) {
+        val userId = event.userId
+        if(userId == null) {
+            logger().error("UserChangedEvent had no user.id")
             return
         }
-        val task = SkipperTask(userId)
+        if(tasksByUserId.contains(userId)) {
+            logger().debug("CurrentSongUpdaterTask for {} is already running.", userId)
+            return
+        }
+        val task = CurrentSongUpdaterTask(userId)
         tasksByUserId[userId] = task
 
         // start the skipper loop indefinitely (unless it is cancelled)
         GlobalScope.launch(Dispatchers.IO) {
             task.run()
         }
-        logger().info("Started skipping for {}", userId)
+        logger().info("Started CurrentSongUpdaterTask for {}", userId)
     }
 
-    fun stopSkipping(userId: String) {
-        tasksByUserId.remove(userId)?.cancel()
-        logger().info("Cancelled skipping for {}", userId)
-    }
 
     fun skipTrack(track: Track?): Boolean {
         return track != null && (
@@ -44,13 +58,19 @@ class SkipperService(
                 track.album.name.contains("\\blive\\b".toRegex(RegexOption.IGNORE_CASE)))
     }
 
-    inner class SkipperTask(private val userId: String) {
+    fun skipperActive(userId: String): Boolean {
+        val user = userRepo.findById(userId)
+            .orElseThrow { IllegalStateException("User with id '$userId' does not exist in DB!") }
+        return user.skipperActive
+    }
+
+    inner class CurrentSongUpdaterTask(private val userId: String) {
 
         private var cancelled = false
 
         suspend fun run() {
             while(!cancelled) {
-                val sleepDuration = skipperLoop()
+                val sleepDuration = currentSongUpdaterLoop()
                 delay(sleepDuration * 1000)
             }
         }
@@ -60,7 +80,7 @@ class SkipperService(
         }
 
         /** run the skipper loop and return the seconds to sleep after this run */
-        private suspend fun skipperLoop() : Long {
+        private suspend fun currentSongUpdaterLoop() : Long {
             val currentlyPlaying = spotifyService.getCurrentlyPlayingTrack(userId)
             if(currentlyPlaying == null || currentlyPlaying.item == null) {
                 applicationEventPublisher.publishEvent(CurrentTrackEvent(this, userId,null, false,0))
@@ -74,7 +94,7 @@ class SkipperService(
             if(!currentlyPlaying.is_playing) {
                 return 10
             }
-            if(skipTrack(track)) {
+            if(skipperActive(userId) && skipTrack(track)) {
                 applicationEventPublisher.publishEvent(SkipEvent(this, userId, track))
                 spotifyService.skip(userId)
                 return 1

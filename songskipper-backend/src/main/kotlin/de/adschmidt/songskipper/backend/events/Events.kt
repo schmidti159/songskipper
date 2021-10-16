@@ -41,6 +41,11 @@ class SkipEvent(
     val track: Track?
 ) : ApplicationEvent(source) {}
 
+class UserChangedEvent(
+    source: Any,
+    val userId: String?
+) : ApplicationEvent(source) {}
+
 @Component
 class EventLogger: Loggable {
     @EventListener
@@ -51,5 +56,9 @@ class EventLogger: Loggable {
     @EventListener
     fun onSkipEvent(event: SkipEvent) {
         logger().info("skipped: {}", event.track?.toSimpleString())
+    }
+
+    fun onUserChangedEvent(event: UserChangedEvent) {
+        logger().info("user data changed: {}", event.userId)
     }
 }
