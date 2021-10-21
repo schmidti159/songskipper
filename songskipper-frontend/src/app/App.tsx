@@ -7,7 +7,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RuleIcon from '@mui/icons-material/Rule';
 import HistoryIcon from '@mui/icons-material/History';
 import { useAppDispatch } from './hooks'
-import connectWebsocket from '../api/WebSocketSubscriber';
+import connectWebsocket from '../api/webSocketSubscriber';
 import { Route, Switch } from 'react-router-dom';
 import LoginContainer from '../features/login/LoginContainer';
 

@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 
 import { useAppSelector } from '../../app/hooks'
 import CurrentlyPlayingCard from './CurrentlyPlayingCard';
-import SkipperCard from '../skipper/SkipperCard';
+import SkipperCard from './SkipperCard';
 import { selectCurrentlyPlayingIsPaused, selectCurrentlyPlayingProgress, selectCurrentlyPlayingTrack } from './currentlyPlayingSlice';
 
 

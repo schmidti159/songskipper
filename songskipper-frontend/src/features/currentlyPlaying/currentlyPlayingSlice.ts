@@ -21,7 +21,6 @@ export const currentlyPlayingSlice = createSlice({
   initialState,
   reducers: {
     currentlyPlayingMessage: (state, action: PayloadAction<CurrentlyPlayingState>) => {
-      console.log("reducer currentlyPlayingMessage called with "+action.payload)
       return action.payload
     }
   }
