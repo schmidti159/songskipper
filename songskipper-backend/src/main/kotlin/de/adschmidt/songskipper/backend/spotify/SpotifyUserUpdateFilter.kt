@@ -2,7 +2,6 @@ package de.adschmidt.songskipper.backend.spotify
 
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.events.UserChangedEvent
-import de.adschmidt.songskipper.backend.logger
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUser
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import org.springframework.context.ApplicationEventPublisher
@@ -12,10 +11,10 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.GenericFilterBean
+import java.time.temporal.ChronoUnit.MINUTES
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
-import java.time.temporal.ChronoUnit.*
 
 /**
  * This filter reads the authenticated user and his tokens from the context and

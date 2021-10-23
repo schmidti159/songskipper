@@ -1,21 +1,17 @@
 import { Card, CardContent, CardMedia, Link, Typography } from '@mui/material'
 import { Fragment } from 'react';
-import type { Track } from '../../common/types'
+import { api } from '../../api/api';
 import PlayingProgressBar from './PlayingProgressBar';
 
-interface CurrentlyPlayingCardProps {
-  track?: Track,
-  isPaused: boolean,
-  progressMs: number
-}
+export default function CurrentlyPlayingCard() {
+  const {data, isLoading} = api.useUpdateCurrentlyPlayingStateQuery()
 
-export default function CurrentlyPlayingCard(props: CurrentlyPlayingCardProps) {
   let cardMedia, cardContent;
-  if(props.track === undefined || props.track === null) {
+  if(isLoading || data == null || data.track == null) {
     // empty card
     cardContent = <Typography variant="h5" component="p">--</Typography>;
   } else {
-    const track = props.track;
+    let {track, isPaused, progressMs} = data
     cardMedia = (
       <Link href={track.album.url} target="_blank" rel="noopener">
         <CardMedia
@@ -45,7 +41,7 @@ export default function CurrentlyPlayingCard(props: CurrentlyPlayingCardProps) {
             {track.album.title}
           </Link>
         </Typography>
-        <PlayingProgressBar isPaused={props.isPaused} durationMs={track.durationMs} progressMs={props.progressMs}/>
+        <PlayingProgressBar isPaused={isPaused} durationMs={track.durationMs} progressMs={progressMs || 0}/>
       </Fragment>
     )
   }
@@ -53,7 +49,7 @@ export default function CurrentlyPlayingCard(props: CurrentlyPlayingCardProps) {
     <Card sx={{display: 'flex'}}>
       {cardMedia}
       <CardContent sx={{width: '100%'}}>
-        <Typography variant="caption" component="p">Currently Playing {props.isPaused && ' - Paused'}</Typography>
+        <Typography variant="caption" component="p">Currently Playing {data?.isPaused && ' - Paused'}</Typography>
         {cardContent}
       </CardContent>
     </Card>

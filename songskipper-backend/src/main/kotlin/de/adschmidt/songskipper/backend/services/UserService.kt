@@ -3,7 +3,6 @@ package de.adschmidt.songskipper.backend.services
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
-import java.security.Principal
 
 @Service
 class UserService {

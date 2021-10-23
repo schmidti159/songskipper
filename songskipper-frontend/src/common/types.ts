@@ -12,3 +12,8 @@ export interface Track {
     },
     durationMs: number
   }
+export interface CurrentlyPlayingState {
+    track?: Track,
+    progressMs?: number,
+    isPaused: boolean
+  }

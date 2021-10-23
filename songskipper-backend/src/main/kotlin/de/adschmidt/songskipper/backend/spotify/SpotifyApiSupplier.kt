@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.lang.Integer.min
 import java.time.Instant
-import java.time.temporal.ChronoUnit.*
+import java.time.temporal.ChronoUnit.SECONDS
 
 @Component
 class SpotifyApiSupplier(

@@ -37,9 +37,9 @@ data class Track (
         )
 }
 
-data class CurrentlyPlayingMessage(
+data class CurrentlyPlayingState(
     val track: Track?,
-    val progressMs: Int?,
-    val isPaused: Boolean?
+    val progressMs: Int,
+    val isPaused: Boolean
 )
 
