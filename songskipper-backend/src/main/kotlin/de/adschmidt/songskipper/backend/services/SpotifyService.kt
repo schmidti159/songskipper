@@ -1,6 +1,8 @@
 package de.adschmidt.songskipper.backend.services
 
 import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying
+import com.wrapper.spotify.model_objects.specification.PagingCursorbased
+import com.wrapper.spotify.model_objects.specification.PlayHistory
 import com.wrapper.spotify.model_objects.specification.Track
 import de.adschmidt.songskipper.backend.spotify.SpotifyApiSupplier
 import kotlinx.coroutines.future.await
@@ -20,9 +22,18 @@ class SpotifyService (
             .skipUsersPlaybackToNextTrack().build().executeAsync().await()
     }
 
-    // TODO cache this result
     suspend fun track(trackId: String, userId: String): Track? {
+        return tracks(arrayOf(trackId), userId)?.get(0)
+    }
+
+    // TODO cache this result
+    suspend fun tracks(trackIds: Array<String>, userId: String): Array<Track>? {
         return spotifyApiSupplier.buildSpotifyApi(userId)
-            .getTrack(trackId).build().executeAsync().await()
+            .getSeveralTracks(*trackIds).build().executeAsync().await()
+    }
+
+    suspend fun getRecentTracks(userId: String, limit: Int): PagingCursorbased<PlayHistory>? {
+        return spotifyApiSupplier.buildSpotifyApi(userId)
+            .currentUsersRecentlyPlayedTracks.limit(limit).build().executeAsync().await()
     }
 }

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Client } from '@stomp/stompjs/esm6/client'
 import SockJS from 'sockjs-client'
-import { CurrentlyPlayingState } from '../common/types'
+import { CurrentlyPlayingState, PlayLogTrack } from '../common/types'
 
 export const api = createApi({
   reducerPath: 'api',
@@ -78,6 +78,11 @@ export const api = createApi({
         // perform cleanup steps once the `cacheEntryRemoved` promise resolves
         stompClient.deactivate()
       },
+    }),
+
+    /* PLAYLOG */
+    getPlayLog: builder.query<PlayLogTrack[], void>({
+      query: () => "playlog/v1/recent-tracks"
     })
   }),
 })

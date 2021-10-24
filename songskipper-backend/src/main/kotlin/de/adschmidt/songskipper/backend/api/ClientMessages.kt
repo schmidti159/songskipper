@@ -32,10 +32,15 @@ data class Track (
     constructor(track: SpotifyTrack) : this(
         track.name, track.externalUrls["spotify"], track.durationMs,
         track.artists.map { Artist(it) },
-        Album(track.album),
-
-        )
+        Album(track.album)
+    )
 }
+
+data class PlayLogTrack (
+    val track: Track,
+    val playedOn: String,
+    val matchingRuleIds: List<String>
+)
 
 data class CurrentlyPlayingState(
     val track: Track?,

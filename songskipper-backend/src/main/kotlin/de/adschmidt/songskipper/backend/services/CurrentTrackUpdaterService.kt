@@ -66,7 +66,7 @@ class CurrentTrackUpdaterService(
 
         /** run the skipper loop and return the seconds to sleep after this run */
         private suspend fun currentSongUpdaterLoop() : Long {
-            val playingState = getCurrentlyPlayingState(userId);
+            val playingState = getCurrentlyPlayingState(userId)
             applicationEventPublisher.publishEvent(CurrentTrackEvent(this, userId, playingState))
             if(playingState.track == null) {
                 return 30
