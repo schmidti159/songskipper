@@ -3,7 +3,7 @@ package de.adschmidt.songskipper.backend.spotify
 import com.wrapper.spotify.SpotifyApi
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.logger
-import de.adschmidt.songskipper.backend.persistence.model.SpotifyUser
+import de.adschmidt.songskipper.backend.persistence.model.SpotifyUserModel
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import kotlinx.coroutines.future.await
 import org.springframework.beans.factory.annotation.Value
@@ -34,16 +34,17 @@ class SpotifyApiSupplier(
             .build() // TODO cache based on accessToken
     }
 
-    private suspend fun refreshTokenIfNeeded(user : SpotifyUser) {
-        if(user.refreshAt != null &&
-            Instant.now().isBefore(user.refreshAt)) {
+    private suspend fun refreshTokenIfNeeded(user: SpotifyUserModel) {
+        if (user.refreshAt != null &&
+            Instant.now().isBefore(user.refreshAt)
+        ) {
             // token is valid at least another 10 minutes
             return
         }
-        if(user.refreshToken == null) {
+        if (user.refreshToken == null) {
             throw IllegalStateException("Refresh token is missing for user ${user.id} but the access token expires.")  // TODO custom exception types
         }
-        logger().info("Refreshing the access token for {}",user.id)
+        logger().info("Refreshing the access token for {}", user.id)
 
         val newToken = SpotifyApi.builder()
                 .setClientId(clientId)

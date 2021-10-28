@@ -15,6 +15,17 @@
             <column name="refresh_token" type="VARCHAR(255)"/>
             <column name="skipper_active" type="BOOLEAN"/>
         </createTable>
+        <createTable tableName="rule">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_rule"/>
+            </column>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false" references="spotify_user(id)" foreignKeyName="fk_rule_user_id"/>
+            </column>
+            <column name="title_expression" type="VARCHAR(255)"/>
+            <column name="artist_expression" type="VARCHAR(255)"/>
+            <column name="album_expression" type="VARCHAR(255)"/>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

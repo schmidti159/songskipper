@@ -1,6 +1,5 @@
 package de.adschmidt.songskipper.backend.api
 
-import de.adschmidt.songskipper.backend.events.CurrentlyPlayingState
 import de.adschmidt.songskipper.backend.services.CurrentTrackUpdaterService
 import de.adschmidt.songskipper.backend.services.UserService
 import org.springframework.web.bind.annotation.GetMapping

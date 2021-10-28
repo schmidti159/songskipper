@@ -1,6 +1,8 @@
 package de.adschmidt.songskipper.backend.events
 
 import de.adschmidt.songskipper.backend.Loggable
+import de.adschmidt.songskipper.backend.api.CurrentlyPlayingState
+import de.adschmidt.songskipper.backend.api.Track
 import de.adschmidt.songskipper.backend.logger
 import org.springframework.context.ApplicationEvent
 import org.springframework.context.event.EventListener
@@ -21,7 +23,8 @@ class SkipEvent(
 
 class UserChangedEvent(
     source: Any,
-    val userId: String?
+    val userId: String?,
+    val newUser: Boolean
 ) : ApplicationEvent(source) {}
 
 @Component
@@ -36,7 +39,8 @@ class EventLogger: Loggable {
         logger().info("skipped: {} (user: {})", event.track, event.userId)
     }
 
+    @EventListener
     fun onUserChangedEvent(event: UserChangedEvent) {
-        logger().info("user data changed: {}", event.userId)
+        logger().info("user data changed: id: {} new: {}", event.userId, event.newUser)
     }
 }

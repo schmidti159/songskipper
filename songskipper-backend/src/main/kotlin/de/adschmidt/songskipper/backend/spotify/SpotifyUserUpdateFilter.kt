@@ -2,7 +2,7 @@ package de.adschmidt.songskipper.backend.spotify
 
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.events.UserChangedEvent
-import de.adschmidt.songskipper.backend.persistence.model.SpotifyUser
+import de.adschmidt.songskipper.backend.persistence.model.SpotifyUserModel
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
@@ -30,9 +30,10 @@ class SpotifyUserUpdateFilter(
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
         val userName = SecurityContextHolder.getContext()?.authentication?.name
         if(userName != null) {
-            val user = spotifyUserRepo.findById(userName).orElse(SpotifyUser(userName))
+            val oldUser = spotifyUserRepo.findById(userName)
+            val user = oldUser.orElse(SpotifyUserModel(userName))
             val authentication = SecurityContextHolder.getContext().authentication
-            if(authentication is OAuth2AuthenticationToken) {
+            if (authentication is OAuth2AuthenticationToken) {
                 // the user is authenticated
                 val client: OAuth2AuthorizedClient = clientService.loadAuthorizedClient(
                     authentication.authorizedClientRegistrationId,
@@ -45,7 +46,7 @@ class SpotifyUserUpdateFilter(
                     user.refreshAt = newRefreshAt
                     user.refreshToken = client.refreshToken?.tokenValue ?: user.refreshToken
                     spotifyUserRepo.save(user)
-                    applicationEventPublisher.publishEvent(UserChangedEvent(this, user.id))
+                    applicationEventPublisher.publishEvent(UserChangedEvent(this, user.id, oldUser.isEmpty))
                     //logger().info("updated user from context: {}, access token will be refreshed at: {}", user.id, user.refreshAt)
                 }
             }
