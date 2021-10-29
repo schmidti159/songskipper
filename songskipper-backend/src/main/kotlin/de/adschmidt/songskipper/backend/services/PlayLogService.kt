@@ -13,11 +13,9 @@ class PlayLogService(
     val ruleService: RuleService,
 ) {
     suspend fun getRecentTracks(userId: String, limit: Int): List<PlayLogTrack> {
-        val historyItems = spotifyService.getRecentTracks(userId, limit)?.items
-            ?: return emptyList()
-        val trackIds = historyItems.map {it.track.id}
+        val historyItems = spotifyService.getRecentTracks(userId, limit)
+        val trackIds = historyItems.map { it.track.id }
         val tracksFull = spotifyService.tracks(trackIds.toTypedArray(), userId)
-            ?: return emptyList()
         val tracks = tracksFull.map { Track(it) }
         return tracks.zip(historyItems) { track, historyItem ->
             PlayLogTrack(track, formatDate(historyItem.playedAt), getMatchingRuleIds(userId, track))

@@ -1,6 +1,7 @@
 package de.adschmidt.songskipper.backend.services
 
-import de.adschmidt.songskipper.backend.TestConfig
+import de.adschmidt.songskipper.backend.SkipperTest
+import de.adschmidt.songskipper.backend.TestConfig.Companion.USER_ID
 import de.adschmidt.songskipper.backend.api.Album
 import de.adschmidt.songskipper.backend.api.Artist
 import de.adschmidt.songskipper.backend.api.Rule
@@ -14,20 +15,12 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
-import org.springframework.test.context.ActiveProfiles
 
 
-@SpringBootTest
-@Import(TestConfig::class)
-@ActiveProfiles("test")
+@SkipperTest
+@kotlinx.coroutines.ExperimentalCoroutinesApi
 internal class RuleServiceIntegrationTest(
 ) {
-    companion object {
-        val USER_ID = "user"
-    }
-
     @Autowired
     private lateinit var ruleService: RuleService
 
@@ -57,44 +50,6 @@ internal class RuleServiceIntegrationTest(
         ruleService.onUserChangedEvent(UserChangedEvent(this, USER_ID, true))
         assertThat(ruleService.getAllRules(USER_ID))
             .hasSize(2)
-    }
-
-    @Test
-    fun `rules can be added, modified and deleted`() {
-        val fooRule = ruleService.addRule(USER_ID, Rule(titleExpression = "fooRule"))
-        assertThat(fooRule.titleExpression)
-            .isEqualTo("fooRule")
-        assertThat(fooRule.albumExpression)
-            .isNull()
-        assertThat(fooRule.artistExpression)
-            .isNull()
-        assertThat(ruleService.getRule(USER_ID, fooRule.id!!))
-            .isEqualTo(fooRule)
-        assertThat(ruleService.getRule("OTHER_USER", fooRule.id!!))
-            .isNull()
-        assertThat(ruleService.getAllRules(USER_ID))
-            .containsExactly(fooRule)
-        assertThat(ruleService.getAllRules("OTHER_USER"))
-            .isEmpty()
-
-        val barRule = ruleService.addRule(USER_ID, Rule(albumExpression = "barRule"))
-        assertThat(ruleService.getAllRules(USER_ID))
-            .containsExactlyInAnyOrder(fooRule, barRule)
-
-        val modifiedFooRule = Rule(titleExpression = "modifiedFooExpression")
-        val bazRule = ruleService.modifyRule(USER_ID, modifiedFooRule, fooRule.id!!)
-        assertThat(bazRule?.id).isEqualTo(fooRule.id)
-        assertThat(ruleService.getAllRules(USER_ID))
-            .containsExactlyInAnyOrder(bazRule, barRule)
-
-
-        ruleService.deleteRule(USER_ID, fooRule.id!!)
-        assertThat(ruleService.getAllRules(USER_ID))
-            .containsExactly(barRule)
-
-        ruleService.deleteRule(USER_ID, barRule.id!!)
-        assertThat(ruleService.getAllRules(USER_ID))
-            .isEmpty()
     }
 
     @Test

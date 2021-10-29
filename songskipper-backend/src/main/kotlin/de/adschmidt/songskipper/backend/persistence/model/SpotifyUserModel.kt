@@ -13,7 +13,7 @@ class SpotifyUserModel(
     var accessToken: String? = null,
     var refreshAt: Instant? = null,
     var refreshToken: String? = null,
-    var skipperActive: Boolean = false
+    var skipperActive: Boolean = true
 ) {
 
 }

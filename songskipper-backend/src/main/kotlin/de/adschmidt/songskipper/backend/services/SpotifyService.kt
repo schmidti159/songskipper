@@ -1,7 +1,6 @@
 package de.adschmidt.songskipper.backend.services
 
 import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying
-import com.wrapper.spotify.model_objects.specification.PagingCursorbased
 import com.wrapper.spotify.model_objects.specification.PlayHistory
 import com.wrapper.spotify.model_objects.specification.Track
 import de.adschmidt.songskipper.backend.spotify.SpotifyApiSupplier
@@ -23,17 +22,19 @@ class SpotifyService (
     }
 
     suspend fun track(trackId: String, userId: String): Track? {
-        return tracks(arrayOf(trackId), userId)?.get(0)
+        return tracks(arrayOf(trackId), userId)[0]
     }
 
     // TODO cache this result
-    suspend fun tracks(trackIds: Array<String>, userId: String): Array<Track>? {
+    suspend fun tracks(trackIds: Array<String>, userId: String): Array<Track> {
         return spotifyApiSupplier.buildSpotifyApi(userId)
             .getSeveralTracks(*trackIds).build().executeAsync().await()
+            ?: emptyArray()
     }
 
-    suspend fun getRecentTracks(userId: String, limit: Int): PagingCursorbased<PlayHistory>? {
+    suspend fun getRecentTracks(userId: String, limit: Int): Array<PlayHistory> {
         return spotifyApiSupplier.buildSpotifyApi(userId)
-            .currentUsersRecentlyPlayedTracks.limit(limit).build().executeAsync().await()
+            .currentUsersRecentlyPlayedTracks.limit(limit).build().executeAsync().await().items
+            ?: emptyArray()
     }
 }

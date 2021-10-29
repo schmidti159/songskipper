@@ -13,7 +13,7 @@ class CurrentlyPlayingApiV1(
     private val userService: UserService
 ) {
     @GetMapping("/currently-playing-track")
-    suspend fun startSkipping(): CurrentlyPlayingState {
+    suspend fun currentlyPlayingTrack(): CurrentlyPlayingState {
         return currentTrackUpdaterService.getCurrentlyPlayingState(userService.verifyUserId())
     }
 }
