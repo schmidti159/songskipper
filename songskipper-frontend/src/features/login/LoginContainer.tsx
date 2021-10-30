@@ -1,26 +1,28 @@
 import { Box, CircularProgress } from '@mui/material';
+import { Fragment } from 'react';
 import { api } from '../../api/api';
 
 interface LoginContainerProps {
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 export default function LoginContainer(props: LoginContainerProps) {
-  const {data: loggedIn, isLoading} = api.useIsLoggedInQuery()
+  const { data: loggedIn, isLoading } = api.useIsLoggedInQuery()
 
-  if(isLoading) {
+  if (isLoading) {
     // wait until the loginState is updated
     return (
       <Box sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     )
-  } else if(!loggedIn) {
+  } else if (!loggedIn) {
     // redirect to trigger the login
     window.location.href = '/oauth2/authorization/spotify';
-    return null
+    return <a href="/oauth2/authorization/spotify">click to authenticate</a>
   } else {
     // logged in -> show the real content
-    return props.children
+    return <Fragment>{props.children}</Fragment>
+
   }
 }

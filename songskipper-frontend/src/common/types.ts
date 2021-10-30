@@ -23,3 +23,11 @@ export interface CurrentlyPlayingState {
   progressMs?: number,
   isPaused: boolean
 }
+
+export interface Rule {
+  id: string,
+  titleExpression?: string,
+  artistExpression?: string,
+  albumExpression?: string
+  
+}

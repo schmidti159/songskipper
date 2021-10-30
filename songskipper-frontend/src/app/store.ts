@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { api } from '../api/api'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
+import { rulesSlice } from '../api/rulesSlice'
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer
+    [api.reducerPath]: api.reducer,
+    rules: rulesSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => 
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware)
 })
 

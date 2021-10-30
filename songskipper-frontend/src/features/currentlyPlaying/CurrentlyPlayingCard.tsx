@@ -4,29 +4,29 @@ import { api } from '../../api/api';
 import PlayingProgressBar from './PlayingProgressBar';
 
 export default function CurrentlyPlayingCard() {
-  const {data, isLoading} = api.useUpdateCurrentlyPlayingStateQuery()
+  const { data, isLoading } = api.useUpdateCurrentlyPlayingStateQuery()
 
   let cardMedia, cardContent;
-  if(isLoading || data == null || data.track == null) {
+  if (isLoading || data == null || data.track == null) {
     // empty card
     cardContent = <Typography variant="h5" component="p">--</Typography>;
   } else {
-    let {track, isPaused, progressMs} = data
+    let { track, isPaused, progressMs } = data
     cardMedia = (
       <Link href={track.album.url} target="_blank" rel="noopener">
         <CardMedia
           component="img"
           sx={{ width: 150, maxHeight: 150 }}
           image={track.album.albumArtUrl}
-          alt="album art"/>
+          alt="album art" />
       </Link>
     )
     const artists = track.artists.map<React.ReactNode>(
-      artist => 
+      artist =>
         <Link href={artist.url} target="_blank" rel="noopener" key={artist.url}>
           {artist.name}
         </Link>
-      ).reduce((prev, cur) => [prev, ', ', cur]);
+    ).reduce((prev, cur) => [prev, ', ', cur]);
     cardContent = (
       <Fragment>
         <Typography variant="h5" component="p">
@@ -41,14 +41,14 @@ export default function CurrentlyPlayingCard() {
             {track.album.title}
           </Link>
         </Typography>
-        <PlayingProgressBar isPaused={isPaused} durationMs={track.durationMs} progressMs={progressMs || 0}/>
+        <PlayingProgressBar isPaused={isPaused} durationMs={track.durationMs} progressMs={progressMs || 0} />
       </Fragment>
     )
   }
   return (
-    <Card sx={{display: 'flex'}}>
+    <Card sx={{ display: 'flex' }}>
       {cardMedia}
-      <CardContent sx={{width: '100%'}}>
+      <CardContent sx={{ width: '100%' }}>
         <Typography variant="caption" component="p">Currently Playing {data?.isPaused && ' - Paused'}</Typography>
         {cardContent}
       </CardContent>
@@ -56,4 +56,3 @@ export default function CurrentlyPlayingCard() {
   )
 }
 
-  

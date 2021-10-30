@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import { NavLink } from 'react-router-dom';
+import LoginContainer from '../login/LoginContainer';
 
 function Copyright(props: any) {
   return (
@@ -82,14 +83,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const mdTheme = createTheme(
-  {
-    palette: {
-      mode: "dark"
-    }
-  }
-);
-
 interface PageFrameProps {
   links: {
     path: string,
@@ -106,85 +99,85 @@ export default function PageFrame(props: PageFrameProps) {
   }
 
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Songskipper for Spotify
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List>
-            {props.links.map( (link, i) => 
-              <ListItem button component={NavLink} key={i.toString()}
-                  to={link.path} activeClassName="Mui-selected" exact>
-                <ListItemIcon>
-                  {link.icon}
-                </ListItemIcon>
-                <ListItemText primary={link.title} />
-              </ListItem>
-            )}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="absolute" open={open}>
+        <Toolbar
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            pr: '24px', // keep right padding when drawer closed
           }}
         >
-          <Toolbar /> {/*empty Toolbar to have the correct distance to the top */}
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: '36px',
+              ...(open && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
+            Songskipper for Spotify
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <Toolbar
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            px: [1],
+          }}
+        >
+          <IconButton onClick={toggleDrawer}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </Toolbar>
+        <Divider />
+        <List>
+          {props.links.map((link, i) =>
+            <ListItem button component={NavLink} key={i.toString()}
+              to={link.path} activeClassName="Mui-selected" exact>
+              <ListItemIcon>
+                {link.icon}
+              </ListItemIcon>
+              <ListItemText primary={link.title} />
+            </ListItem>
+          )}
+        </List>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+          flexGrow: 1,
+          height: '100vh',
+          overflow: 'auto',
+        }}
+      >
+        <Toolbar /> {/*empty Toolbar to have the correct distance to the top */}
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <LoginContainer>
             {props.children}
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-          
-        </Box>
+          </LoginContainer>
+          <Copyright sx={{ pt: 4 }} />
+        </Container>
+
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 }
 

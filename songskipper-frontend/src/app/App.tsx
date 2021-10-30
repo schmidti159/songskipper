@@ -7,11 +7,12 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RuleIcon from '@mui/icons-material/Rule';
 import HistoryIcon from '@mui/icons-material/History';
 import { Route, Switch } from 'react-router-dom';
-import LoginContainer from '../features/login/LoginContainer';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './theme';
 
 function App() {
   return (
-    <LoginContainer>
+    <ThemeProvider theme={theme}>
       <PageFrame links={[
         {
           path: "/",
@@ -34,16 +35,15 @@ function App() {
             <SkipRules />
           </Route>
           <Route path="/log">
-            <PlayLog/>
+            <PlayLog />
           </Route>
           <Route path="/">
-            <CurrentlyPlayingPage/>
+            <CurrentlyPlayingPage />
           </Route>
         </Switch>
       </PageFrame>
-    </LoginContainer>
+    </ThemeProvider>
   );
 }
 
 export default App;
- 
