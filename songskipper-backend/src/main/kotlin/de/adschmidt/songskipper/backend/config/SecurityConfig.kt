@@ -61,6 +61,9 @@ class SecurityConfig {
                     authorize(anyRequest, permitAll)
 //                    authorize(anyRequest, permitAll)
                 }
+                csrf {
+                    disable()
+                }
                 addFilterAfter<OAuth2LoginAuthenticationFilter>(spotifyUserUpdateFilter)
                 cors {
                     disable()

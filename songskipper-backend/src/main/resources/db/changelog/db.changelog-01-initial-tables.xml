@@ -22,6 +22,7 @@
             <column name="user_id" type="VARCHAR(255)">
                 <constraints nullable="false" references="spotify_user(id)" foreignKeyName="fk_rule_user_id"/>
             </column>
+            <column name="title" type="VARCHAR(255)"/>
             <column name="title_expression" type="VARCHAR(255)"/>
             <column name="artist_expression" type="VARCHAR(255)"/>
             <column name="album_expression" type="VARCHAR(255)"/>

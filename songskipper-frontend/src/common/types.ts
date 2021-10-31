@@ -26,8 +26,9 @@ export interface CurrentlyPlayingState {
 
 export interface Rule {
   id: string,
+  title: string,
   titleExpression?: string,
   artistExpression?: string,
   albumExpression?: string
-  
+
 }

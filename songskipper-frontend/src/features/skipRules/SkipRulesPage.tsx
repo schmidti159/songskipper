@@ -11,7 +11,7 @@ export default function SkipRulesPage() {
   const { isLoading } = api.useGetRulesQuery()
   const rules = useSelector(selectAllRules)
   console.log(rules)
-  if (isLoading || rules.length === 0) {
+  if (isLoading) {
     return <CircularProgress />
   } else {
     return (

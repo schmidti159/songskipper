@@ -51,6 +51,7 @@ data class CurrentlyPlayingState(
 
 data class Rule(
     val id: String? = null,
+    val title: String? = null,
     val titleExpression: String? = null,
     val artistExpression: String? = null,
     val albumExpression: String? = null

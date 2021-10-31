@@ -5,7 +5,6 @@ import de.adschmidt.songskipper.backend.api.Expression
 import de.adschmidt.songskipper.backend.api.ExpressionFlag.IGNORE_CASE
 import de.adschmidt.songskipper.backend.api.ExpressionFlag.WHOLE_WORD
 import de.adschmidt.songskipper.backend.api.ExpressionType.GLOB
-import de.adschmidt.songskipper.backend.api.ExpressionType.REGEX
 import de.adschmidt.songskipper.backend.api.Rule
 import de.adschmidt.songskipper.backend.api.Track
 import de.adschmidt.songskipper.backend.events.UserChangedEvent
@@ -14,18 +13,11 @@ import de.adschmidt.songskipper.backend.persistence.model.RuleModel
 import de.adschmidt.songskipper.backend.persistence.repo.RuleRepo
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
-import org.springframework.util.AntPathMatcher
 
 @Service
 class RuleService(
-    private val ruleRepo: RuleRepo,
-    private val antMatcher: AntPathMatcher = AntPathMatcher(),
-    private val antMatcherIgnoreCase: AntPathMatcher = AntPathMatcher()
+    private val ruleRepo: RuleRepo
 ) : Loggable {
-    init {
-        antMatcher.setCaseSensitive(true)
-        antMatcherIgnoreCase.setCaseSensitive(false)
-    }
 
     fun getAllRules(userId: String): List<Rule> {
         return ruleRepo.findByUserId(userId).map { it.toRule() }
@@ -42,6 +34,8 @@ class RuleService(
 
     fun addRule(userId: String, rule: Rule): Rule {
         val ruleModel = RuleModel(rule, userId)
+        // make sure to generate a unique id for this rule
+        ruleModel.id = null
         return ruleRepo.save(ruleModel).toRule()
     }
 
@@ -73,8 +67,8 @@ class RuleService(
     }
 
     private fun initWithDefaultRules(userId: String) {
-        val liveTrackRule = RuleModel(null, userId, "r:live:bi", null, null)
-        val liveAlbumRule = RuleModel(null, userId, null, null, "r:live:bi")
+        val liveTrackRule = RuleModel(null, userId, "Live Tracks", "g:live:bi", null, null)
+        val liveAlbumRule = RuleModel(null, userId, "Live Albums", null, null, "g:live:bi")
         ruleRepo.saveAll(listOf(liveTrackRule, liveAlbumRule))
     }
 
@@ -89,22 +83,48 @@ class RuleService(
     private fun contains(content: String, expressionString: String?): Boolean {
         val expr = Expression.parse(expressionString)
             ?: return false
-        if (expr.type == REGEX) {
-            val regexOptions =
-                if (expr.hasFlag(IGNORE_CASE)) setOf(RegexOption.IGNORE_CASE)
-                else emptySet()
-            val regex =
-                if (expr.hasFlag(WHOLE_WORD)) "\\b${expr.pattern}\\b"
-                else expr.pattern
-            return content.contains(regex.toRegex(regexOptions))
-        }
+        var regexPattern = expr.pattern
         if (expr.type == GLOB) {
-            val matcher =
-                if (expr.hasFlag(IGNORE_CASE)) antMatcherIgnoreCase
-                else antMatcher
-            return matcher.match("*${expr.pattern}*", content)
+            regexPattern = globToRegex(regexPattern)
         }
-        return false
+        if (expr.hasFlag(WHOLE_WORD)) {
+            regexPattern = "\\b${regexPattern}\\b"
+        }
+        val regexOptions =
+            if (expr.hasFlag(IGNORE_CASE))
+                setOf(RegexOption.IGNORE_CASE)
+            else emptySet()
+        return content.contains(regexPattern.toRegex(regexOptions))
+    }
+
+    private fun globToRegex(pattern: String): String {
+        val result = StringBuilder()
+        var isIgnoring = false
+        for (char in pattern.toCharArray()) {
+            if (char == '?') {
+                if (isIgnoring) {
+                    result.append("\\E")
+                    isIgnoring = false
+                }
+                result.append('.')
+            } else if (char == '*') {
+                if (isIgnoring) {
+                    result.append("\\E")
+                    isIgnoring = false
+                }
+                result.append(".*")
+            } else {
+                if (!isIgnoring) {
+                    result.append("\\Q")
+                    isIgnoring = true
+                }
+                result.append(char)
+            }
+        }
+        if (isIgnoring) {
+            result.append("\\E")
+        }
+        return result.toString()
     }
 
 }

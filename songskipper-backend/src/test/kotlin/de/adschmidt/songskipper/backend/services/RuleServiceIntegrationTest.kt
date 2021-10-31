@@ -69,26 +69,45 @@ internal class RuleServiceIntegrationTest(
             .containsExactlyInAnyOrder(liveRule, liveRuleIgnoreCase)
         assertThat(ruleService.findMatchingRules(USER_ID, track("AliVe")))
             .containsExactlyInAnyOrder(liveRuleIgnoreCase)
-        assertThat(ruleService.findMatchingRules(USER_ID, track("Al!Ve")))
+        assertThat(ruleService.findMatchingRules(USER_ID, track("AliV3")))
             .isEmpty()
     }
 
     @Test
     fun `globExpression are evaluated correctly`() {
         val liveRule = ruleService.addRule(USER_ID, Rule(titleExpression = "g:l??e:"))
-        val liveRuleIgnoreCase = ruleService.addRule(USER_ID, Rule(titleExpression = "r:l*e:i"))
+        val liveRuleWholeWord = ruleService.addRule(USER_ID, Rule(titleExpression = "g:l??e:b"))
+        val liveRuleIgnoreCase = ruleService.addRule(USER_ID, Rule(titleExpression = "g:l*e:i"))
+        val liveRuleIgnoreCaseWholeWord = ruleService.addRule(USER_ID, Rule(titleExpression = "g:l?*e:bi"))
 
         assertThat(ruleService.findMatchingRules(USER_ID, track("Foo live")))
-            .containsExactlyInAnyOrder(liveRule, liveRuleIgnoreCase)
+            .containsExactlyInAnyOrder(liveRule, liveRuleWholeWord, liveRuleIgnoreCase, liveRuleIgnoreCaseWholeWord)
         assertThat(ruleService.findMatchingRules(USER_ID, track("lvie-Bar")))
-            .containsExactlyInAnyOrder(liveRule, liveRuleIgnoreCase)
+            .containsExactlyInAnyOrder(liveRule, liveRuleWholeWord, liveRuleIgnoreCase, liveRuleIgnoreCaseWholeWord)
         assertThat(ruleService.findMatchingRules(USER_ID, track("Ignore Case LiVe Matches")))
-            .containsExactlyInAnyOrder(liveRuleIgnoreCase)
+            .containsExactlyInAnyOrder(liveRuleIgnoreCase, liveRuleIgnoreCaseWholeWord)
         assertThat(ruleService.findMatchingRules(USER_ID, track("liveshow")))
             .containsExactlyInAnyOrder(liveRule, liveRuleIgnoreCase)
         assertThat(ruleService.findMatchingRules(USER_ID, track("AliVE")))
             .containsExactlyInAnyOrder(liveRuleIgnoreCase)
-        assertThat(ruleService.findMatchingRules(USER_ID, track("Al!V3")))
+        assertThat(ruleService.findMatchingRules(USER_ID, track("AliV3")))
+            .isEmpty()
+    }
+
+    @Test
+    fun `regexCharacters in glob are escaped correctly`() {
+        val globRule = ruleService.addRule(USER_ID, Rule(titleExpression = "g:T.[abc](x|y){2}e*f:"))
+        val regexRule = ruleService.addRule(USER_ID, Rule(titleExpression = "r:T.[abc](x|y){2}e*f:"))
+
+        assertThat(ruleService.findMatchingRules(USER_ID, track("T.[abc](x|y){2}e_random_content_f")))
+            .containsExactlyInAnyOrder(globRule)
+        assertThat(ruleService.findMatchingRules(USER_ID, track("Txaxxeeeef")))
+            .containsExactlyInAnyOrder(regexRule)
+        assertThat(ruleService.findMatchingRules(USER_ID, track("T.[abc](x|y){2}e*f")))
+            .containsExactlyInAnyOrder(globRule)
+        assertThat(ruleService.findMatchingRules(USER_ID, track("T_cyxf")))
+            .containsExactlyInAnyOrder(regexRule)
+        assertThat(ruleService.findMatchingRules(USER_ID, track("T_cyxe")))
             .isEmpty()
     }
 

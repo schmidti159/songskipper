@@ -49,7 +49,7 @@ export default function CurrentlyPlayingCard() {
     <Card sx={{ display: 'flex' }}>
       {cardMedia}
       <CardContent sx={{ width: '100%' }}>
-        <Typography variant="caption" component="p">Currently Playing {data?.isPaused && ' - Paused'}</Typography>
+        <Typography variant="h6" component="p">Currently Playing {data?.isPaused && ' - Paused'}</Typography>
         {cardContent}
       </CardContent>
     </Card>

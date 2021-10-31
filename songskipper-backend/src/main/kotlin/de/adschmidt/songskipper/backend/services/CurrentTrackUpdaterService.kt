@@ -46,7 +46,7 @@ class CurrentTrackUpdaterService(
     suspend fun getCurrentlyPlayingState(userId: String): CurrentlyPlayingState {
         val currentlyPlaying = spotifyService.getCurrentlyPlayingTrack(userId)
         if(currentlyPlaying == null || currentlyPlaying.item == null) {
-            return CurrentlyPlayingState(null, 0, false)
+            return CurrentlyPlayingState(null, 0, true)
         }
         val spotifyTrack = spotifyService.track(currentlyPlaying.item.id, userId)
         val apiTrack = if(spotifyTrack != null) Track(spotifyTrack) else null
