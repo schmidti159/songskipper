@@ -30,5 +30,13 @@ export interface Rule {
   titleExpression?: string,
   artistExpression?: string,
   albumExpression?: string
+}
 
+export type ConditionType = 'track' | 'artist' | 'album'
+
+export interface Condition {
+  type: ConditionType
+  initialExpression?: string
+  expression?: string
+  inChangeMode: boolean
 }

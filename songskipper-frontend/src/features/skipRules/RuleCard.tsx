@@ -1,22 +1,13 @@
-import { Box, Button, Card, CardActions, CardContent, Divider, Grid, IconButton } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Divider, Grid } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import { Rule } from "../../common/types";
+import { Condition, ConditionType, Rule } from "../../common/types";
 import RuleCondition from "./RuleCondition";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from "react";
 import { api } from "../../api/api";
 import RuleTitle from "./RuleTitle";
-
-
-export type ConditionType = 'track' | 'artist' | 'album'
-
-export interface Condition {
-  type: ConditionType
-  initialExpression?: string
-  expression?: string
-  inChangeMode: boolean
-}
+import AddConditionButton from "./AddConditionButton";
+import ConfirmDeletionDialog from "./ConfirmDeletionDialog";
 
 function conditionChanged(condition: Condition) {
   return condition.initialExpression !== condition.expression
@@ -46,6 +37,24 @@ function mergeCondition(conditions: Condition[], type: ConditionType, newExpress
   newConditions[conditions.findIndex(c => c.type === type)].expression = newExpression
   return newConditions
 }
+function initializeCondition(conditions: Condition[], type: ConditionType) {
+  const newConditions = [...conditions]
+  const index = conditions.findIndex(c => c.type === type)
+  newConditions[index].expression = 'g::bi'
+  if (newConditions[index].initialExpression == null) {
+    newConditions[index].initialExpression = 'g::bi'
+  }
+  return newConditions
+}
+function clearCondition(conditions: Condition[], type: ConditionType) {
+  const newConditions = [...conditions]
+  const index = conditions.findIndex(c => c.type === type)
+  newConditions[index].expression = undefined
+  if (newConditions[index].initialExpression === 'g::bi') {
+    newConditions[index].initialExpression = undefined
+  }
+  return newConditions
+}
 function toggleChangeMode(conditions: Condition[], type: ConditionType) {
   const newConditions = [...conditions]
   const index = conditions.findIndex(c => c.type === type)
@@ -70,11 +79,13 @@ interface RuleCardProps {
 export default function RuleCard(props: RuleCardProps) {
   const rule = props.rule
   const [deleteRule] = api.useDeleteRuleByIdMutation()
-  const [updateRule] = api.useUpdatedRuleMutation()
+  const [updateRule] = api.useUpdateRuleMutation()
 
   const [conditions, setConditions] = useState(initialConditions(rule))
   const [title, setTitle] = useState(rule.title)
   const [titleInChangeMode, setTitleChangeMode] = useState(false)
+
+  const [confirmDeletionDialogOpen, setConfirmDeletionDialogOpen] = useState(false)
 
   const save = () => {
     updateRule(toRule(rule.id, title, conditions));
@@ -87,6 +98,9 @@ export default function RuleCard(props: RuleCardProps) {
       }
     }))
   }
+  const missingTypes = conditions.filter(condition => condition.expression == null)
+    .map(condition => condition.type)
+  const enabledConditions = conditions.filter(condition => condition.expression != null)
 
   return (
     <Grid item xs={12} md={6} lg={4}>
@@ -98,31 +112,31 @@ export default function RuleCard(props: RuleCardProps) {
               toggleChangeMode={() => setTitleChangeMode(!titleInChangeMode)}
               onSave={save} />
             {
-              conditions.some(condition => condition.expression == null) &&
-              <IconButton aria-label="add condition">
-                <AddCircleIcon />
-              </IconButton>
+              missingTypes.length > 0 &&
+              <AddConditionButton possibleTypes={missingTypes}
+                onNewCondition={(type) => setConditions(initializeCondition(conditions, type))} />
             }
           </Box>
           {
-            conditions
-              .filter(condition => condition.expression != null)
-              .map(condition => [
-                <RuleCondition key={rule.id + "_" + condition.type}
-                  condition={condition}
-                  onChange={(expression) => setConditions(mergeCondition(conditions, condition.type, expression))}
-                  toggleChangeMode={() => setConditions(toggleChangeMode(conditions, condition.type))}
-                  onSave={save} />])
-              .reduce((prev, curr) => prev.length <= 1 ? curr : [...prev, <Divider key={curr[0].key + "_divider"} />, ...curr], [])
+            enabledConditions.map(condition => [
+              <RuleCondition key={rule.id + "_" + condition.type}
+                condition={condition}
+                onChange={(expression) => setConditions(mergeCondition(conditions, condition.type, expression))}
+                onDelete={() => setConditions(clearCondition(conditions, condition.type))}
+                toggleChangeMode={() => setConditions(toggleChangeMode(conditions, condition.type))}
+                onSave={save} />])
+              .reduce((prev, curr) => prev.length < 1 ? curr : [...prev, <Divider key={curr[0].key + "_divider"} />, ...curr], [])
           }
         </CardContent>
         <CardActions>
           <Button startIcon={<DeleteIcon />} variant="text" sx={{ marginLeft: 'auto' }}
-            onClick={() => deleteRule(rule.id)}>Delete</Button> {/*TODO extra verification before deletion */}
+            onClick={() => setConfirmDeletionDialogOpen(true)}>Delete</Button>
           <Button startIcon={<SaveIcon />} variant="contained"
             disabled={conditions.every(c => !conditionChanged(c)) && title === rule.title}
             onClick={save}>Save</Button>
         </CardActions>
+        <ConfirmDeletionDialog open={confirmDeletionDialogOpen} onCancel={() => setConfirmDeletionDialogOpen(false)}
+          onConfirm={() => deleteRule(rule.id)} />
       </Card>
     </Grid>
   )

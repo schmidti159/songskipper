@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { api } from '../api/api'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
-import { rulesSlice } from '../api/rulesSlice'
+import { rulesSlice } from '../features/skipRules/rulesSlice'
 
 export const store = configureStore({
   reducer: {

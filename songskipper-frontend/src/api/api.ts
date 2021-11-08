@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Client } from '@stomp/stompjs/esm6/client'
 import SockJS from 'sockjs-client'
 import { CurrentlyPlayingState, PlayLogTrack, Rule } from '../common/types'
-import { ruleDeleted, rulesUpdated, ruleUpdated } from './rulesSlice'
+import { ruleDeleted, rulesUpdated, ruleUpdated } from '../features/skipRules/rulesSlice'
 
 export const api = createApi({
   reducerPath: 'api',
@@ -127,7 +127,7 @@ export const api = createApi({
         }
       },
     }),
-    updatedRule: builder.mutation<Rule, Rule>({
+    updateRule: builder.mutation<Rule, Rule>({
       query: (rule) => ({
         url: `rules/v1/${rule.id}/`,
         method: "PUT",

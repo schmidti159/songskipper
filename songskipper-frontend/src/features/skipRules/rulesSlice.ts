@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
-import { Rule } from "../common/types";
+import { RootState } from "../../app/store";
+import { Rule } from "../../common/types";
 
 
 const rulesAdapter = createEntityAdapter<Rule>({
