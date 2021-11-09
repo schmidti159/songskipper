@@ -1,5 +1,6 @@
 package de.adschmidt.songskipper.backend.services
 
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -10,7 +11,7 @@ class UserService {
     fun verifyUserId() : String {
         val userId = getUserId()
         if(userId.isBlank()) {
-            throw IllegalStateException("user is not logged in!")
+            throw AccessDeniedException("user is not logged in!")
         }
         return userId
     }

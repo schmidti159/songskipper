@@ -37,7 +37,7 @@ export const api = createApi({
 
     /* CURRENTLY PLAYING */
     updateCurrentlyPlayingState: builder.query<CurrentlyPlayingState, void>({
-      query: () => 'currently-playing/v1/currently-playing-track',
+      query: () => 'player/v1/currently-playing-track',
       async onCacheEntryAdded(
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
@@ -81,6 +81,38 @@ export const api = createApi({
         await cacheEntryRemoved
         // perform cleanup steps once the `cacheEntryRemoved` promise resolves
         stompClient.deactivate()
+      },
+    }),
+    nextTrack: builder.mutation<CurrentlyPlayingState, void>({
+      query: () => ({
+        url: 'player/v1/next',
+        method: "POST"
+      }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data: state } = await queryFulfilled
+          dispatch(api.util.updateQueryData('updateCurrentlyPlayingState', undefined, (draft) => {
+            Object.assign(draft, state)
+          }))
+        } catch {
+          // do not update state
+        }
+      },
+    }),
+    previousTrack: builder.mutation<void, void>({
+      query: () => ({
+        url: 'player/v1/previous',
+        method: "POST"
+      }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data: state } = await queryFulfilled
+          dispatch(api.util.updateQueryData('updateCurrentlyPlayingState', undefined, (draft) => {
+            Object.assign(draft, state)
+          }))
+        } catch {
+          // do not update state
+        }
       },
     }),
 

@@ -2,6 +2,7 @@ package de.adschmidt.songskipper.backend.spotify
 
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.events.UserChangedEvent
+import de.adschmidt.songskipper.backend.logger
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUserModel
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import org.springframework.context.ApplicationEventPublisher
@@ -47,7 +48,7 @@ class SpotifyUserUpdateFilter(
                     user.refreshToken = client.refreshToken?.tokenValue ?: user.refreshToken
                     spotifyUserRepo.save(user)
                     applicationEventPublisher.publishEvent(UserChangedEvent(this, user.id, oldUser.isEmpty))
-                    //logger().info("updated user from context: {}, access token will be refreshed at: {}", user.id, user.refreshAt)
+                    logger().info("updated user from context: {}, access token will be refreshed at: {}", user.id, user.refreshAt)
                 }
             }
         }

@@ -21,7 +21,7 @@ internal class CurrentylPlayingApiIntegrationTest(
 ) {
 
     @Autowired
-    private lateinit var currentlyPlayingApi: CurrentlyPlayingApiV1
+    private lateinit var currentlyPlayingApi: PlayerApiV1
 
     @Autowired
     private lateinit var spotifyUserRepo: SpotifyUserRepo

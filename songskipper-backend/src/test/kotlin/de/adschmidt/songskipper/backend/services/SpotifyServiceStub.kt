@@ -18,8 +18,12 @@ class SpotifyServiceStub(spotifyUserRepo: SpotifyUserRepo) : SpotifyService(Spot
             .build()
     }
 
-    override suspend fun skip(userId: String): String? {
-        return null
+    override suspend fun skip(userId: String) {
+        return
+    }
+
+    override suspend fun previousTrack(userId: String) {
+        return
     }
 
     override suspend fun tracks(trackIds: Array<String>, userId: String): Array<Track> {

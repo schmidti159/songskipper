@@ -16,9 +16,15 @@ class SpotifyService (
             .usersCurrentlyPlayingTrack.build().executeAsync().await()
     }
 
-    suspend fun skip(userId: String): String? {
-        return spotifyApiSupplier.buildSpotifyApi(userId)
+    suspend fun skip(userId: String) {
+        spotifyApiSupplier.buildSpotifyApi(userId)
             .skipUsersPlaybackToNextTrack().build().executeAsync().await()
+    }
+
+    suspend fun previousTrack(userId: String) {
+        spotifyApiSupplier.buildSpotifyApi(userId)
+            .skipUsersPlaybackToPreviousTrack().build().executeAsync().await()
+
     }
 
     suspend fun track(trackId: String, userId: String): Track? {
@@ -37,4 +43,5 @@ class SpotifyService (
             .currentUsersRecentlyPlayedTracks.limit(limit).build().executeAsync().await().items
             ?: emptyArray()
     }
+
 }
