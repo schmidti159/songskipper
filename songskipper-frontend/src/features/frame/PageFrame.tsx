@@ -16,6 +16,7 @@ import Container from '@mui/material/Container';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import { NavLink } from 'react-router-dom';
 import LoginContainer from '../login/LoginContainer';
@@ -119,6 +120,7 @@ export default function PageFrame(props: PageFrameProps) {
           >
             <MenuIcon />
           </IconButton>
+          <SkipNextIcon color="primary" sx={{ marginRight: 1 }} />
           <Typography
             component="h1"
             variant="h6"
