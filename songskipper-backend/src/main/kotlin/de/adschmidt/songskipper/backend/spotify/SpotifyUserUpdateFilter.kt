@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.GenericFilterBean
+import java.time.Instant
 import java.time.temporal.ChronoUnit.MINUTES
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
@@ -43,6 +44,8 @@ class SpotifyUserUpdateFilter(
                 // refresh 10 min before it expires
                 val newRefreshAt = client.accessToken.expiresAt?.minus(10, MINUTES)
                 if (newRefreshAt != null && (user.refreshAt == null || user.refreshAt!!.isBefore(newRefreshAt))) {
+                    user.email = authentication.principal.attributes["email"] as String?
+                    user.lastLogin = Instant.now()
                     user.accessToken = client.accessToken.tokenValue
                     user.refreshAt = newRefreshAt
                     user.refreshToken = client.refreshToken?.tokenValue ?: user.refreshToken
