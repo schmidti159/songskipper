@@ -22,13 +22,25 @@ class PlayerApiV1(
     @PostMapping("/next")
     suspend fun nextTrack(): CurrentlyPlayingState {
         val userId = userService.verifyUserId()
-        spotifyService.skip(userId)
+        spotifyService.nextTrack(userId)
         return currentTrackUpdaterService.getCurrentlyPlayingState(userId)
     }
     @PostMapping("/previous")
     suspend fun previousTrack(): CurrentlyPlayingState {
         val userId = userService.verifyUserId()
         spotifyService.previousTrack(userId)
+        return currentTrackUpdaterService.getCurrentlyPlayingState(userId)
+    }
+    @PostMapping("/play")
+    suspend fun play(): CurrentlyPlayingState {
+        val userId = userService.verifyUserId()
+        spotifyService.startPlayback(userId)
+        return currentTrackUpdaterService.getCurrentlyPlayingState(userId)
+    }
+    @PostMapping("/pause")
+    suspend fun pause(): CurrentlyPlayingState {
+        val userId = userService.verifyUserId()
+        spotifyService.pausePlayback(userId)
         return currentTrackUpdaterService.getCurrentlyPlayingState(userId)
     }
 }

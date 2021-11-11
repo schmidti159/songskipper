@@ -115,6 +115,38 @@ export const api = createApi({
         }
       },
     }),
+    play: builder.mutation<void, void>({
+      query: () => ({
+        url: 'player/v1/play',
+        method: "POST"
+      }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data: state } = await queryFulfilled
+          dispatch(api.util.updateQueryData('updateCurrentlyPlayingState', undefined, (draft) => {
+            Object.assign(draft, state)
+          }))
+        } catch {
+          // do not update state
+        }
+      },
+    }),
+    pause: builder.mutation<void, void>({
+      query: () => ({
+        url: 'player/v1/pause',
+        method: "POST"
+      }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data: state } = await queryFulfilled
+          dispatch(api.util.updateQueryData('updateCurrentlyPlayingState', undefined, (draft) => {
+            Object.assign(draft, state)
+          }))
+        } catch {
+          // do not update state
+        }
+      },
+    }),
 
     /* PLAYLOG */
     getPlayLog: builder.query<PlayLogTrack[], void>({

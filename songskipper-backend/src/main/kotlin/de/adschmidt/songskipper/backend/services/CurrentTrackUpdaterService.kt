@@ -80,7 +80,7 @@ class CurrentTrackUpdaterService(
             }
             if(skipperService.skipTrack(userId, playingState.track)) {
                 applicationEventPublisher.publishEvent(SkipEvent(this, userId, playingState.track))
-                spotifyService.skip(userId)
+                spotifyService.nextTrack(userId)
                 return 1
             }
             val remaining = (playingState.track.durationMs - playingState.progressMs) / 1000
