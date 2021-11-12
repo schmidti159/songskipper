@@ -19,9 +19,11 @@ export default function SkipRulesPage() {
     return (
       <>
         <Grid container spacing={3}>
-          {rules.map(rule =>
-            <RuleCard key={rule.id} rule={rule} />
-          )}
+          {rules.map(rule => (
+            <Grid item xs={12} md={6} lg={4} key={rule.id}>
+              <RuleCard rule={rule} />
+            </Grid>
+          ))}
         </Grid>
 
         <Fab color="primary" aria-label="add rule"

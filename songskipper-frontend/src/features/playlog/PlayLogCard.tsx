@@ -1,49 +1,22 @@
-import { Card, CardContent, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { api } from '../../api/api';
+import { Card, CardContent, Typography } from '@mui/material'
 import { PlayLogTrack } from '../../common/types';
+import TrackCardContent from '../currentlyPlaying/TrackCardContent';
+import TrackCardMedia from '../currentlyPlaying/TrackCardMedia';
 
-interface PlayLogRowProps {
-  entry: PlayLogTrack
+interface PlayLogCardProps {
+  logEntry: PlayLogTrack
 }
 
-function PlayLogRow(props: PlayLogRowProps) {
-  const { track, playedOn, matchingRuleIds } = props.entry
+export default function PlayLogCard(props: PlayLogCardProps) {
+  const { track, playedOn, matchingRuleIds } = props.logEntry;
   return (
-    <TableRow key={track.url} sx={{ backgroundColor: (matchingRuleIds.length > 0 ? "warning.dark" : "") }}>
-      <TableCell>{playedOn}</TableCell>
-      <TableCell>{track.title}</TableCell>
-      <TableCell>{track.artists.map(artist => artist.name).join(", ")}</TableCell>
-      <TableCell><img src={track.album.albumArtUrl} alt="album art" width="50" height="50" /></TableCell>
-      <TableCell>{track.album.title}</TableCell>
-    </TableRow>
-  )
-}
-
-export default function PlayLogCard() {
-  const { data: playLogEntries, isLoading } = api.useGetPlayLogQuery()
-  const content = isLoading ? (
-    <CircularProgress />
-  ) : (
-    <Table size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell>Date</TableCell>
-          <TableCell>Track</TableCell>
-          <TableCell>Artist(s)</TableCell>
-          <TableCell colSpan={2}>Album</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {playLogEntries && playLogEntries.map(
-          (entry) => <PlayLogRow entry={entry} />)}
-      </TableBody>
-    </Table>
-  )
-  return (
-    <Card sx={{ display: 'flex' }}>
+    <Card sx={{ display: 'flex', backgroundColor: (matchingRuleIds.length > 0 ? "secondary.dark" : "") }}>
+      <TrackCardMedia track={track} />
       <CardContent sx={{ width: '100%' }}>
-        <Typography variant="h6" component="p">Play Log</Typography>
-        {content}
+        <Typography variant="caption" component="p">
+          {playedOn}
+        </Typography>
+        <TrackCardContent track={track} />
       </CardContent>
     </Card>
   )

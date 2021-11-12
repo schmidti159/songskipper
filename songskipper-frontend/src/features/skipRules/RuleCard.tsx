@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, Divider, Grid } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Divider } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import { Condition, ConditionType, Rule } from "../../common/types";
@@ -103,42 +103,40 @@ export default function RuleCard(props: RuleCardProps) {
   const enabledConditions = conditions.filter(condition => condition.expression != null)
 
   return (
-    <Grid item xs={12} md={6} lg={4}>
-      <Card>
-        <CardContent>
-          <Box sx={{ display: 'flex' }}>
-            <RuleTitle title={title} initialTitle={rule.title} inChangeMode={titleInChangeMode}
-              onChange={setTitle}
-              toggleChangeMode={() => setTitleChangeMode(!titleInChangeMode)}
-              onSave={save} />
-            {
-              missingTypes.length > 0 &&
-              <AddConditionButton possibleTypes={missingTypes}
-                onNewCondition={(type) => setConditions(initializeCondition(conditions, type))} />
-            }
-          </Box>
+    <Card>
+      <CardContent>
+        <Box sx={{ display: 'flex' }}>
+          <RuleTitle title={title} initialTitle={rule.title} inChangeMode={titleInChangeMode}
+            onChange={setTitle}
+            toggleChangeMode={() => setTitleChangeMode(!titleInChangeMode)}
+            onSave={save} />
           {
-            enabledConditions.map(condition => [
-              <RuleCondition key={rule.id + "_" + condition.type}
-                condition={condition}
-                onChange={(expression) => setConditions(mergeCondition(conditions, condition.type, expression))}
-                onDelete={() => setConditions(clearCondition(conditions, condition.type))}
-                toggleChangeMode={() => setConditions(toggleChangeMode(conditions, condition.type))}
-                onSave={save} />])
-              .reduce((prev, curr) => prev.length < 1 ? curr : [...prev, <Divider key={curr[0].key + "_divider"} />, ...curr], [])
+            missingTypes.length > 0 &&
+            <AddConditionButton possibleTypes={missingTypes}
+              onNewCondition={(type) => setConditions(initializeCondition(conditions, type))} />
           }
-        </CardContent>
-        <CardActions>
-          <Button startIcon={<DeleteIcon />} variant="text" sx={{ marginLeft: 'auto' }}
-            onClick={() => setConfirmDeletionDialogOpen(true)}>Delete</Button>
-          <Button startIcon={<SaveIcon />} variant="contained"
-            disabled={conditions.every(c => !conditionChanged(c)) && title === rule.title}
-            onClick={save}>Save</Button>
-        </CardActions>
-        <ConfirmDeletionDialog open={confirmDeletionDialogOpen} onCancel={() => setConfirmDeletionDialogOpen(false)}
-          onConfirm={() => deleteRule(rule.id)} />
-      </Card>
-    </Grid>
+        </Box>
+        {
+          enabledConditions.map(condition => [
+            <RuleCondition key={rule.id + "_" + condition.type}
+              condition={condition}
+              onChange={(expression) => setConditions(mergeCondition(conditions, condition.type, expression))}
+              onDelete={() => setConditions(clearCondition(conditions, condition.type))}
+              toggleChangeMode={() => setConditions(toggleChangeMode(conditions, condition.type))}
+              onSave={save} />])
+            .reduce((prev, curr) => prev.length < 1 ? curr : [...prev, <Divider key={curr[0].key + "_divider"} />, ...curr], [])
+        }
+      </CardContent>
+      <CardActions>
+        <Button startIcon={<DeleteIcon />} variant="text" sx={{ marginLeft: 'auto' }}
+          onClick={() => setConfirmDeletionDialogOpen(true)}>Delete</Button>
+        <Button startIcon={<SaveIcon />} variant="contained"
+          disabled={conditions.every(c => !conditionChanged(c)) && title === rule.title}
+          onClick={save}>Save</Button>
+      </CardActions>
+      <ConfirmDeletionDialog open={confirmDeletionDialogOpen} onCancel={() => setConfirmDeletionDialogOpen(false)}
+        onConfirm={() => deleteRule(rule.id)} />
+    </Card>
   )
 }
 
