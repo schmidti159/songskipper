@@ -1,12 +1,14 @@
-import { CardMedia, Link } from '@mui/material'
+import { CardMedia, Link } from '@mui/material';
 import { Track } from '../../common/types';
 
 interface TrackCardMediaProps {
-  track?: Track
+  track?: Track,
+  minWidth?: number,
+  maxWidth?: number;
 }
 
 export default function TrackCardMedia(props: TrackCardMediaProps) {
-  const emptyCard = props.track == null
+  const emptyCard = props.track == null;
   if (emptyCard) {
     return <></>;
   } else {
@@ -14,10 +16,10 @@ export default function TrackCardMedia(props: TrackCardMediaProps) {
       <Link href={props.track?.album.url} target="_blank" rel="noopener" color="inherit">
         <CardMedia
           component="img"
-          sx={{ maxHeight: 190, width: '100%' }}
+          sx={{ maxWidth: props.maxWidth || 175, minWidth: props.minWidth || 75, width: '100%' }}
           image={props.track?.album.albumArtUrl}
           alt="album art" />
-      </Link>)
+      </Link>);
   }
 }
 

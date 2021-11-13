@@ -25,7 +25,7 @@ export function iconForType(type: string) {
 }
 export function descriptionForType(type: string) {
   switch (type) {
-    case 'track': return 'Track'
+    case 'track': return 'Title'
     case 'artist': return 'Artist'
     case 'album': return 'Album'
   }

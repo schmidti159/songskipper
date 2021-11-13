@@ -1,10 +1,10 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 interface ConfirmDeletionDialogProps {
-  open: boolean
-  onConfirm: (() => void)
-  onCancel: (() => void)
+  open: boolean;
+  onConfirm: (() => void);
+  onCancel: (() => void);
 }
 
 export default function ConfirmDeletionDialog(props: ConfirmDeletionDialogProps) {
@@ -21,6 +21,6 @@ export default function ConfirmDeletionDialog(props: ConfirmDeletionDialogProps)
         <Button startIcon={<DeleteIcon />} variant="contained" onClick={props.onConfirm}>Delete</Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }
 

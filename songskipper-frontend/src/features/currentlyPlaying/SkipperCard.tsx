@@ -1,13 +1,13 @@
 import { Card, CardContent, Switch, Typography } from "@mui/material";
-import { api } from "../../api/api";
+import { skipperApi } from "../../api/skipperApi";
 
 export default function SkipperCard() {
-  let { data: active, isLoading } = api.useIsSkipperActiveQuery()
+  let { data: active, isLoading } = skipperApi.useIsSkipperActiveQuery();
   if (isLoading) {
-    active = false
+    active = false;
   }
 
-  const [setSkipper] = api.useSetSkipperStateMutation()
+  const [setSkipper] = skipperApi.useSetSkipperStateMutation();
 
   return (
     <Card>
@@ -16,5 +16,5 @@ export default function SkipperCard() {
         <Switch checked={active} disabled={isLoading} onClick={() => setSkipper(!active)} />
       </CardContent>
     </Card>
-  )
+  );
 }

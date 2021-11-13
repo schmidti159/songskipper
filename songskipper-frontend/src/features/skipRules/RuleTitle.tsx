@@ -1,23 +1,23 @@
-import { IconButton, TextField, Typography } from "@mui/material";
-import UndoIcon from '@mui/icons-material/Undo';
 import EditIcon from '@mui/icons-material/Edit';
+import UndoIcon from '@mui/icons-material/Undo';
+import { IconButton, TextField, Typography } from "@mui/material";
 import { KeyboardEventHandler } from "react";
 
 
 interface RuleTitleProps {
-  title: string
-  initialTitle: string
-  inChangeMode: boolean
-  toggleChangeMode: (() => void)
-  onChange: ((title: string) => void)
-  onSave: (() => void)
+  title: string;
+  initialTitle: string;
+  inChangeMode: boolean;
+  toggleChangeMode: (() => void);
+  onChange: ((title: string) => void);
+  onSave: (() => void);
 }
 
 export default function RuleTitle(props: RuleTitleProps) {
   const undo = () => {
     props.onChange(props.initialTitle);
     props.toggleChangeMode();
-  }
+  };
   const keyHandler: KeyboardEventHandler = (event) => {
     if (event.key === 'Enter') {
       props.onSave();
@@ -26,7 +26,7 @@ export default function RuleTitle(props: RuleTitleProps) {
       undo();
       event.preventDefault();
     }
-  }
+  };
 
   if (props.inChangeMode) {
     return <>
@@ -39,7 +39,7 @@ export default function RuleTitle(props: RuleTitleProps) {
         onClick={undo}>
         <UndoIcon />
       </IconButton>
-    </>
+    </>;
   } else {
     return <>
       <Typography variant="h6" component="p" onClick={props.toggleChangeMode}>{props.title}</Typography>
@@ -47,6 +47,6 @@ export default function RuleTitle(props: RuleTitleProps) {
       <IconButton aria-label="edit title" sx={{ marginLeft: 'auto' }} onClick={props.toggleChangeMode}>
         <EditIcon />
       </IconButton>
-    </>
+    </>;
   }
 }

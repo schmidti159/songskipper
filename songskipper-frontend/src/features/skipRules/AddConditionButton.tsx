@@ -1,12 +1,12 @@
-import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import React from "react";
-import { descriptionForType, iconForType } from "./RuleCondition";
 import { ConditionType } from "../../common/types";
+import { descriptionForType, iconForType } from "./RuleCondition";
 
 interface AddConditionButtonProps {
-  possibleTypes: ConditionType[]
-  onNewCondition: ((type: ConditionType) => void)
+  possibleTypes: ConditionType[];
+  onNewCondition: ((type: ConditionType) => void);
 }
 
 export default function AddConditionButton(props: AddConditionButtonProps) {
@@ -41,5 +41,5 @@ export default function AddConditionButton(props: AddConditionButtonProps) {
           </MenuItem>
         )}
       </Menu>
-    </>)
+    </>);
 }

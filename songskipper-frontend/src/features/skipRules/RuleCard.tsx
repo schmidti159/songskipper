@@ -4,13 +4,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Condition, ConditionType, Rule } from "../../common/types";
 import RuleCondition from "./RuleCondition";
 import { useState } from "react";
-import { api } from "../../api/api";
 import RuleTitle from "./RuleTitle";
 import AddConditionButton from "./AddConditionButton";
 import ConfirmDeletionDialog from "./ConfirmDeletionDialog";
+import { rulesApi } from '../../api/rulesApi';
 
 function conditionChanged(condition: Condition) {
-  return condition.initialExpression !== condition.expression
+  return condition.initialExpression !== condition.expression;
 }
 function initialConditions(rule: Rule): Condition[] {
   return [
@@ -30,36 +30,36 @@ function initialConditions(rule: Rule): Condition[] {
       expression: rule.albumExpression,
       inChangeMode: false
     }
-  ]
+  ];
 }
 function mergeCondition(conditions: Condition[], type: ConditionType, newExpression?: string) {
-  const newConditions = [...conditions]
-  newConditions[conditions.findIndex(c => c.type === type)].expression = newExpression
-  return newConditions
+  const newConditions = [...conditions];
+  newConditions[conditions.findIndex(c => c.type === type)].expression = newExpression;
+  return newConditions;
 }
 function initializeCondition(conditions: Condition[], type: ConditionType) {
-  const newConditions = [...conditions]
-  const index = conditions.findIndex(c => c.type === type)
-  newConditions[index].expression = 'g::bi'
+  const newConditions = [...conditions];
+  const index = conditions.findIndex(c => c.type === type);
+  newConditions[index].expression = 'g::bi';
   if (newConditions[index].initialExpression == null) {
-    newConditions[index].initialExpression = 'g::bi'
+    newConditions[index].initialExpression = 'g::bi';
   }
-  return newConditions
+  return newConditions;
 }
 function clearCondition(conditions: Condition[], type: ConditionType) {
-  const newConditions = [...conditions]
-  const index = conditions.findIndex(c => c.type === type)
-  newConditions[index].expression = undefined
+  const newConditions = [...conditions];
+  const index = conditions.findIndex(c => c.type === type);
+  newConditions[index].expression = undefined;
   if (newConditions[index].initialExpression === 'g::bi') {
-    newConditions[index].initialExpression = undefined
+    newConditions[index].initialExpression = undefined;
   }
-  return newConditions
+  return newConditions;
 }
 function toggleChangeMode(conditions: Condition[], type: ConditionType) {
-  const newConditions = [...conditions]
-  const index = conditions.findIndex(c => c.type === type)
-  newConditions[index].inChangeMode = !newConditions[index].inChangeMode
-  return newConditions
+  const newConditions = [...conditions];
+  const index = conditions.findIndex(c => c.type === type);
+  newConditions[index].inChangeMode = !newConditions[index].inChangeMode;
+  return newConditions;
 }
 
 function toRule(id: string, title: string, conditions: Condition[]): Rule {
@@ -69,38 +69,38 @@ function toRule(id: string, title: string, conditions: Condition[]): Rule {
     titleExpression: conditions.filter(c => c.type === 'track')[0].expression,
     artistExpression: conditions.filter(c => c.type === 'artist')[0].expression,
     albumExpression: conditions.filter(c => c.type === 'album')[0].expression
-  }
+  };
 }
 
 interface RuleCardProps {
-  rule: Rule
+  rule: Rule;
 }
 
 export default function RuleCard(props: RuleCardProps) {
-  const rule = props.rule
-  const [deleteRule] = api.useDeleteRuleByIdMutation()
-  const [updateRule] = api.useUpdateRuleMutation()
+  const rule = props.rule;
+  const [deleteRule] = rulesApi.useDeleteRuleByIdMutation();
+  const [updateRule] = rulesApi.useUpdateRuleMutation();
 
-  const [conditions, setConditions] = useState(initialConditions(rule))
-  const [title, setTitle] = useState(rule.title)
-  const [titleInChangeMode, setTitleChangeMode] = useState(false)
+  const [conditions, setConditions] = useState(initialConditions(rule));
+  const [title, setTitle] = useState(rule.title);
+  const [titleInChangeMode, setTitleChangeMode] = useState(false);
 
-  const [confirmDeletionDialogOpen, setConfirmDeletionDialogOpen] = useState(false)
+  const [confirmDeletionDialogOpen, setConfirmDeletionDialogOpen] = useState(false);
 
   const save = () => {
     updateRule(toRule(rule.id, title, conditions));
-    setTitleChangeMode(false)
+    setTitleChangeMode(false);
     setConditions(conditions.map(condition => {
       return {
         ...condition,
         inChangeMode: false,
         initialExpression: condition.expression
-      }
-    }))
-  }
+      };
+    }));
+  };
   const missingTypes = conditions.filter(condition => condition.expression == null)
-    .map(condition => condition.type)
-  const enabledConditions = conditions.filter(condition => condition.expression != null)
+    .map(condition => condition.type);
+  const enabledConditions = conditions.filter(condition => condition.expression != null);
 
   return (
     <Card>
@@ -137,6 +137,6 @@ export default function RuleCard(props: RuleCardProps) {
       <ConfirmDeletionDialog open={confirmDeletionDialogOpen} onCancel={() => setConfirmDeletionDialogOpen(false)}
         onConfirm={() => deleteRule(rule.id)} />
     </Card>
-  )
+  );
 }
 

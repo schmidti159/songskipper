@@ -1,6 +1,6 @@
 
 import Grid from '@mui/material/Grid';
-import { api } from '../../api/api';
+import { rulesApi } from '../../api/rulesApi';
 import { CircularProgress, Fab } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectAllRules } from './rulesSlice';
@@ -9,12 +9,12 @@ import RuleCard from './RuleCard';
 
 
 export default function SkipRulesPage() {
-  const { isLoading } = api.useGetRulesQuery()
-  const [createRule] = api.useCreateRuleMutation()
-  const rules = useSelector(selectAllRules)
-  console.log(rules)
+  const { isLoading } = rulesApi.useGetRulesQuery();
+  const [createRule] = rulesApi.useCreateRuleMutation();
+  const rules = useSelector(selectAllRules);
+
   if (isLoading) {
-    return <CircularProgress />
+    return <CircularProgress />;
   } else {
     return (
       <>
@@ -39,6 +39,6 @@ export default function SkipRulesPage() {
           <AddIcon />
         </Fab>
       </>
-    )
+    );
   }
 }

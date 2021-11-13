@@ -22,7 +22,7 @@ export default function TrackCardContent(props: TrackCardContentProps) {
         </Link>
     ).reduce((prev, cur) => [prev, ', ', cur]);
     return <>
-      <Typography variant="h5" component="p">
+      <Typography variant="body1" component="p">
         <Link href={track.url} target="_blank" rel="noopener" color="inherit">
           {track.title}
         </Link>

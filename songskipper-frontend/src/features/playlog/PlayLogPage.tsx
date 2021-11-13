@@ -1,14 +1,14 @@
 
 import { CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { api } from '../../api/api';
+import { playlogApi } from '../../api/playlogApi';
 import PlayLogCard from './PlayLogCard';
 
 
 export default function PlayLog() {
-  const { data: playLogEntries, isLoading } = api.useGetPlayLogQuery()
+  const { data: playLogEntries, isLoading } = playlogApi.useGetPlayLogQuery();
   if (isLoading || playLogEntries === undefined) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
   return (
     <Grid container spacing={3}>
