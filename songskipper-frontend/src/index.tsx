@@ -1,18 +1,22 @@
+import { ThemeProvider } from '@mui/material';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from "react-router-dom";
 import App from './app/App';
+import { store } from './app/store';
+import { theme } from './app/theme';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,

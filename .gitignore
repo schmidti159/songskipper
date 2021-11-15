@@ -1,3 +1,5 @@
+/songskipper-backend/src/main/resources/application-secrets.yml
+
 HELP.md
 .gradle
 build/
@@ -30,7 +32,6 @@ out/
 .vscode/
 
 .jpb
-/backend/src/main/resources/application-secrets.yml
 
 # dependencies
 node_modules
@@ -50,3 +51,6 @@ yarn-error.log*
 
 # Ignore Gradle build output directory
 build
+songskipper-frontend/coverage
+
+
