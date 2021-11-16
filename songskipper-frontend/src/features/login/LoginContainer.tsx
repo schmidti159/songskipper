@@ -18,7 +18,7 @@ export default function LoginContainer(props: LoginContainerProps) {
     );
   } else if (!loggedIn) {
     // redirect to trigger the login
-    window.location.href = '/oauth2/authorization/spotify';
+    window.location.assign('oauth2/authorization/spotify');
     return <a href="/oauth2/authorization/spotify">click to authenticate</a>;
   } else {
     // logged in -> show the real content

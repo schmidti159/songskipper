@@ -1,25 +1,25 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Link from '@mui/material/Link';
+import MenuIcon from '@mui/icons-material/Menu';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import MuiDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-
+import { styled } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import LoginContainer from '../login/LoginContainer';
+
 
 function Copyright(props: any) {
   return (
@@ -88,16 +88,16 @@ interface PageFrameProps {
   links: {
     path: string,
     title: string,
-    icon: React.ReactNode
+    icon: React.ReactNode;
   }[],
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function PageFrame(props: PageFrameProps) {
   const [open, setOpen] = React.useState(window.innerWidth > 768);
   const toggleDrawer = () => {
     setOpen(!open);
-  }
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -112,6 +112,7 @@ export default function PageFrame(props: PageFrameProps) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            aria-hidden={open}
             onClick={toggleDrawer}
             sx={{
               marginRight: '36px',
@@ -141,7 +142,10 @@ export default function PageFrame(props: PageFrameProps) {
             px: [1],
           }}
         >
-          <IconButton onClick={toggleDrawer}>
+          <IconButton
+            aria-label="close drawer"
+            aria-hidden={!open}
+            onClick={toggleDrawer}>
             <ChevronLeftIcon />
           </IconButton>
         </Toolbar>
