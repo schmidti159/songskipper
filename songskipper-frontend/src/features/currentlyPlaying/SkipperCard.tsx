@@ -13,7 +13,7 @@ export default function SkipperCard() {
     <Card>
       <CardContent>
         <Typography variant="h6" component="p">Skipper Enabled</Typography>
-        <Switch checked={active} disabled={isLoading} onClick={() => setSkipper(!active)} />
+        <Switch value={active} checked={active} disabled={isLoading} onClick={() => setSkipper(!active)} />
       </CardContent>
     </Card>
   );
