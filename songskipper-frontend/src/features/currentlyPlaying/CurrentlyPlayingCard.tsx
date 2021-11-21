@@ -10,7 +10,7 @@ export default function CurrentlyPlayingCard() {
   const noTrack = data?.track == null;
 
   return (
-    <Card sx={{ display: 'flex', alignItems: 'center' }}>
+    <Card sx={{ display: 'flex', alignItems: 'left', flexDirection: { xs: 'column', sm: 'inherit' } }} >
       <TrackCardMedia track={data?.track} />
       <CardContent sx={{ width: '100%' }}>
         <CreateRuleFromTrackButton track={data?.track} />

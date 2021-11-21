@@ -1,10 +1,25 @@
 
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 import React from 'react';
 import { fireEvent, render, screen, waitFor, within } from '../../test-utils';
 import PageFrame from './PageFrame';
 
 describe('The page Frame shows a navigation and the current content', () => {
-
+  const server = setupServer(
+    rest.get('/api/public/user/v1/id', (req, res, ctx) => {
+      return res(ctx.status(200));
+    }),
+  );
+  beforeAll(() => {
+    server.listen();
+  });
+  afterEach(() => {
+    server.resetHandlers();
+  });
+  afterAll(() => {
+    server.close();
+  });
   test('Shows navigation and content', () => {
     render(<PageFrame links={[{
       path: "/a",
@@ -51,10 +66,5 @@ describe('The page Frame shows a navigation and the current content', () => {
     await waitFor(() => expect(screen.getByLabelText(/close drawer/)?.getAttribute('aria-hidden')).toEqual('false'));
 
     expect(screen.getByLabelText(/open drawer/)?.getAttribute('aria-hidden')).toEqual('true');
-
-    //screen.debug();
-    //expect(screen.queryByLabelText(/open drawer/)).toBeNull();
-    //expect(screen.queryByLabelText(/close drawer/)).toBeInTheDocument();
-
   });
 });

@@ -4,7 +4,7 @@ import React from "react";
 interface PlayingProgressBarProps {
   isPaused?: boolean,
   progressMs: number,
-  durationMs: number
+  durationMs: number;
 }
 
 function formatTime(milliseconds: number) {
@@ -17,7 +17,7 @@ function formatTime(milliseconds: number) {
 export default function PlayingProgressBar(props: PlayingProgressBarProps) {
 
   const [progressMs, setProgressMs] = React.useState(0);
-  React.useEffect(() => setProgressMs(props.progressMs), [props.progressMs])
+  React.useEffect(() => setProgressMs(props.progressMs), [props.progressMs]);
   React.useEffect(() => {
     const timer = setInterval(() => {
       setProgressMs((oldProgressMs) => {
@@ -38,5 +38,5 @@ export default function PlayingProgressBar(props: PlayingProgressBarProps) {
         <Typography variant="body2" color="text.secondary">{formatTime(progressMs)}/{formatTime(props.durationMs)}</Typography>
       </Box>
     </Box>
-  )
+  );
 }

@@ -1,11 +1,11 @@
 
-import Grid from '@mui/material/Grid';
-import { rulesApi } from '../../api/rulesApi';
-import { CircularProgress, Fab } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { selectAllRules } from './rulesSlice';
 import AddIcon from '@mui/icons-material/Add';
+import { CircularProgress, Fab } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { useSelector } from 'react-redux';
+import { rulesApi } from '../../api/rulesApi';
 import RuleCard from './RuleCard';
+import { selectAllRules } from './rulesSlice';
 
 
 export default function SkipRulesPage() {
