@@ -3,3 +3,11 @@ spring:
   #    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  security:
+    # it is necessary to set some client-id/client-secret to be able to run the tests
+    oauth2:
+      client:
+        registration:
+          spotify:
+            client-id: test-client-id
+            client-secret: test-client-secret
