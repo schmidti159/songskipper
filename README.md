@@ -11,6 +11,16 @@ I am working on it. If you want to test the demo please send me a mail with the 
 
 It only works with premium accounts.
 
+## Screenshots
+- Currently Playing screen\
+![Currently Playing screen](docs/CurrentlyPlaying.png)
+- Create new rule from track\
+![Create Rule](docs/CreateRule.png)
+- Rules screen\
+![Skip Rules](docs/SkipRules.png)
+- Playlog screen\
+![Playlog](docs/Playlog.png)
+
 ## Why does it exist
 - To skip songs I don't wan't to hear
 - To learn about technologies that I wanted to try ;-)
