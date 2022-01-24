@@ -3,11 +3,12 @@ services:
   frontend:
     image: songskipper/frontend:0.0.1-SNAPSHOT
     ports:
-      - "9000:9000"
+      - "8080:80"
     depends_on:
       - backend
     environment:
-      - NGINX_PORT=9000
+      - NGINX_PORT=80
+      - SONGSKIPPER_BACKEND=http://backend:8080
 
   backend:
     image: songskipper/backend:0.0.1-SNAPSHOT

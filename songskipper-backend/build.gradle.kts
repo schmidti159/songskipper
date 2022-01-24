@@ -54,10 +54,13 @@ tasks.jacocoTestReport {
 	dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
+tasks.dockerPrepare {
+	dependsOn(tasks.bootJar.get(), tasks.jar.get())
+}
+
 docker {
 	name = "songskipper/backend:"+project.version
 	setDockerfile(File("docker/Dockerfile"))
 	files("build/libs")
 	buildArgs(mapOf(Pair("BUILD_VERSION", project.version as String)))
-	dependsOn(tasks.bootJar.get())
 }

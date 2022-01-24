@@ -24,9 +24,9 @@ server {
     }
 
 
-    # redirect api to backend
+    # proxy api / websockets to backend
     location ~* ^/(api|oauth2|login)/ {
-        proxy_pass http://backend:8080;
+        proxy_pass ${SONGSKIPPER_BACKEND};
 
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Server $host;

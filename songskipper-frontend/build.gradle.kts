@@ -9,6 +9,8 @@ plugins {
 // tests the frontend (result is in build)
 val npmRunTests = tasks.register<NpmTask>("npmRunTests") {
     dependsOn(tasks.npmInstall)
+    outputs.dir("coverage")
+    inputs.dir("src")
     environment.put("CI", "true")
     args.set(listOf("run", "test"))
 }
@@ -17,6 +19,8 @@ val npmRunTests = tasks.register<NpmTask>("npmRunTests") {
 val npmRunBuild = tasks.register<NpmTask>("npmRunBuild") {
     dependsOn(tasks.npmInstall, npmRunTests)
     outputs.dir("build/resources/main/static")
+    inputs.dir("src")
+    inputs.dir("public")
     args.set(listOf("run", "build"))
 }
 tasks.jar {
@@ -37,10 +41,12 @@ sourceSets {
     }
 }
 
+tasks.dockerPrepare {
+    dependsOn(npmRunBuild.get(), tasks.processResources.get())
+}
 docker {
     name = "songskipper/frontend:"+project.version
     setDockerfile(File("docker/Dockerfile"))
-    files("build/resources/main", "docker/nginx-default.conf")
-    dependsOn(tasks.npmInstall.get())
+    files("build/resources/main", "docker/nginx-default.conf.template")
 }
 
