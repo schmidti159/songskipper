@@ -1,7 +1,6 @@
 allprojects {
     group = "de.adschmidt.songskipper"
     version = "0.0.1-SNAPSHOT"
-
 }
 plugins {
     java

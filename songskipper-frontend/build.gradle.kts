@@ -3,7 +3,9 @@ import com.github.gradle.node.npm.task.NpmTask
 plugins {
     id("com.github.node-gradle.node") version ("3.1.1")
     java
+    id("com.palantir.docker") version ("0.32.0")
 }
+
 // tests the frontend (result is in build)
 val npmRunTests = tasks.register<NpmTask>("npmRunTests") {
     dependsOn(tasks.npmInstall)
@@ -33,5 +35,12 @@ sourceSets {
             setSrcDirs(listOf("dist"))
         }
     }
+}
+
+docker {
+    name = "songskipper/frontend:"+project.version
+    setDockerfile(File("docker/Dockerfile"))
+    files("build/resources/main", "docker/nginx-default.conf")
+    dependsOn(tasks.npmInstall.get())
 }
 

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  frontend:
+    image: songskipper/frontend:0.0.1-SNAPSHOT
+    ports:
+      - "9000:9000"
+    depends_on:
+      - backend
+    environment:
+      - NGINX_PORT=9000
+
+  backend:
+    image: songskipper/backend:0.0.1-SNAPSHOT

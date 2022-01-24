@@ -27,3 +27,5 @@ spring:
             authorization-uri: https://accounts.spotify.com/authorize
             user-info-uri: https://api.spotify.com/v1/me
             userNameAttribute: id
+server:
+  forward-headers-strategy: NATIVE

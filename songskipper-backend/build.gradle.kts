@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
 	id("org.springframework.boot") version "2.5.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -7,6 +6,7 @@ plugins {
 	kotlin("plugin.spring") version "1.5.21"
 	kotlin("plugin.jpa") version "1.5.21"
 	jacoco
+	id("com.palantir.docker") version ("0.32.0")
 }
 
 repositories {
@@ -26,11 +26,11 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0")
 	implementation("se.michaelthelin.spotify:spotify-web-api-java:6.5.4")
 	implementation("org.slf4j:slf4j-api")
 	implementation("org.liquibase:liquibase-core")
-	implementation("org.springdoc:springdoc-openapi-ui:1.5.10")
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.3")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
@@ -52,4 +52,12 @@ tasks.test {
 }
 tasks.jacocoTestReport {
 	dependsOn(tasks.test) // tests are required to run before generating the report
+}
+
+docker {
+	name = "songskipper/backend:"+project.version
+	setDockerfile(File("docker/Dockerfile"))
+	files("build/libs")
+	buildArgs(mapOf(Pair("BUILD_VERSION", project.version as String)))
+	dependsOn(tasks.bootJar.get())
 }
