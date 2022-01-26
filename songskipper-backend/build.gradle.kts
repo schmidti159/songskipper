@@ -31,7 +31,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0")
-	implementation("se.michaelthelin.spotify:spotify-web-api-java:6.5.4")
+	implementation("se.michaelthelin.spotify:spotify-web-api-java:7.0.0")
 	implementation("org.slf4j:slf4j-api")
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.3")

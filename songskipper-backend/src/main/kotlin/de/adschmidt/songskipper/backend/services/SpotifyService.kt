@@ -1,8 +1,8 @@
 package de.adschmidt.songskipper.backend.services
 
-import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying
-import com.wrapper.spotify.model_objects.specification.PlayHistory
-import com.wrapper.spotify.model_objects.specification.Track
+import se.michaelthelin.spotify.model_objects.miscellaneous.CurrentlyPlaying
+import se.michaelthelin.spotify.model_objects.specification.PlayHistory
+import se.michaelthelin.spotify.model_objects.specification.Track
 import de.adschmidt.songskipper.backend.spotify.SpotifyApiSupplier
 import kotlinx.coroutines.future.await
 import org.springframework.stereotype.Service
