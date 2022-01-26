@@ -1,6 +1,5 @@
 package de.adschmidt.songskipper.backend.spotify
 
-import com.wrapper.spotify.SpotifyApi
 import de.adschmidt.songskipper.backend.Loggable
 import de.adschmidt.songskipper.backend.logger
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUserModel
@@ -8,6 +7,7 @@ import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import kotlinx.coroutines.future.await
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import se.michaelthelin.spotify.SpotifyApi
 import java.lang.Integer.min
 import java.time.Instant
 import java.time.temporal.ChronoUnit.SECONDS

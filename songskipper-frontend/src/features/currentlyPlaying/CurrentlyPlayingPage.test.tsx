@@ -1,18 +1,15 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { TextDecoder, TextEncoder } from 'util';
+import { act } from 'react-dom/test-utils';
 import { api } from '../../api/api';
 import { store } from '../../app/store';
 import { Track } from '../../common/types';
-import { act, fireEvent, render, screen, waitFor, within } from '../../test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../test-utils';
 import CurrentlyPlayingPage from './CurrentlyPlayingPage';
 import PlayerControlButtons from './PlayerControlButtons';
 import SkipperCard from './SkipperCard';
 import TrackCardContent from './TrackCardContent';
 import TrackCardMedia from './TrackCardMedia';
-
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
 
 describe('CurrentlyPlayingPage', () => {
   const track: Track = {
@@ -141,9 +138,10 @@ describe('CurrentlyPlayingPage', () => {
       expect(progressbar.getAttribute('aria-valuemin')).toEqual('0');
       expect(progressbar.getAttribute('aria-valuenow')).toEqual('55');
 
-      act(() =>
-        jest.advanceTimersByTime(2000)
-      );
+      act(() => {
+        jest.advanceTimersByTime(2000);
+      });
+
       progressbar = screen.getByRole('progressbar');
       expect(screen.getByText(/0:25\s*\/\s*0:42/)).toBeInTheDocument();
       expect(progressbar.getAttribute('aria-valuemax')).toEqual('100');

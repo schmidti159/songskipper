@@ -10,6 +10,7 @@ plugins {
 val npmRunTests = tasks.register<NpmTask>("npmRunTests") {
     dependsOn(tasks.npmInstall)
     outputs.dir("coverage")
+    inputs.file("package-lock.json")
     inputs.dir("src")
     environment.put("CI", "true")
     args.set(listOf("run", "test"))
@@ -21,6 +22,7 @@ val npmRunBuild = tasks.register<NpmTask>("npmRunBuild") {
     outputs.dir("build/resources/main/static")
     inputs.dir("src")
     inputs.dir("public")
+    inputs.file("package-lock.json")
     args.set(listOf("run", "build"))
 }
 tasks.jar {

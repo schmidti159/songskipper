@@ -1,8 +1,8 @@
 package de.adschmidt.songskipper.backend.api
 
-import com.wrapper.spotify.model_objects.specification.AlbumSimplified
-import com.wrapper.spotify.model_objects.specification.ArtistSimplified
-import com.wrapper.spotify.model_objects.specification.Track as SpotifyTrack
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified
+import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified
+import se.michaelthelin.spotify.model_objects.specification.Track as SpotifyTrack
 
 data class Artist(
     val name: String,

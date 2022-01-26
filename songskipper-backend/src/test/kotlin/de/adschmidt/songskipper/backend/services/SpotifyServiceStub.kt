@@ -1,7 +1,7 @@
 package de.adschmidt.songskipper.backend.services
 
-import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying
-import com.wrapper.spotify.model_objects.specification.*
+import se.michaelthelin.spotify.model_objects.miscellaneous.CurrentlyPlaying
+import se.michaelthelin.spotify.model_objects.specification.*
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import de.adschmidt.songskipper.backend.spotify.SpotifyApiSupplier
 import java.util.*
