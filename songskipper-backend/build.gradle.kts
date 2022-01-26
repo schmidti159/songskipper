@@ -19,7 +19,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	// h2 for testing
 	implementation("com.h2database:h2")
+	// postgres for prod
+	runtimeOnly("org.postgresql:postgresql")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
@@ -45,6 +48,9 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+tasks.bootRun {
+	args = listOf("--spring.profiles.active=dev")
 }
 
 tasks.test {

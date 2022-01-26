@@ -12,3 +12,21 @@ services:
 
   backend:
     image: songskipper/backend:0.0.1-SNAPSHOT
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/songskipper
+      - SPRING_DATASOURCE_USERNAME=songskipper
+      - SPRING_DATASOURCE_PASSWORD=changeit
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    ports:
+      - "8081:5432"
+    environment:
+      - POSTGRES_PASSWORD=changeit
+      - POSTGRES_USER=songskipper
+      - POSTGRES_DB=songskipper
+    volumes:
+      - "./db_data:/var/lib/postgresql/data"

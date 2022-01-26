@@ -1,8 +1,9 @@
 spring:
-#  main:
-  #    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
   security:
     # it is necessary to set some client-id/client-secret to be able to run the tests
     oauth2:

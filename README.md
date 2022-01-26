@@ -39,7 +39,7 @@ It only works with premium accounts.
 4. Run it: `java -jar songskipper-backend/build/libs/songskipper-backend-0.0.1-SNAPSHOT.jar`
 5. Open it in the browser: `http://localhost:8080/`
 
-### Development for frontend
+### Development server for frontend
 1. Launch the backend (with `java -jar ...` or with `./gradlew bootRun`).
 2. Launch the frontend as dev-server: `/gradlew nodeStart` or `npm start` from `songskipper-frontend`
 3. Open it in the browser: `http://localhost:3000/`
