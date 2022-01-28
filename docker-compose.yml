@@ -1,5 +1,6 @@
 version: "3"
 services:
+  # application
   frontend:
     image: songskipper/frontend:0.0.1-SNAPSHOT
     ports:
@@ -23,10 +24,66 @@ services:
     image: postgres:14.1-alpine
     restart: always
     ports:
-      - "8081:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=changeit
       - POSTGRES_USER=songskipper
       - POSTGRES_DB=songskipper
     volumes:
-      - "./db_data:/var/lib/postgresql/data"
+      - "songskipper-postgresql:/var/lib/postgresql/data"
+
+  # monitoring and metrics
+  nginx-frontend-metrics-exporter:
+    image: nginx/nginx-prometheus-exporter:0.10.0
+    environment:
+      - SCRAPE_URI=http://frontend:8080/metrics
+      - TELEMETRY_PATH=/prometheus
+      - NGINX_RETRIES=1
+  prometheus:
+    image: prom/prometheus:v2.32.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./docker/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "songskipper-prometheus:/prometheus"
+  grafana:
+    image: grafana/grafana:8.3.4
+    ports:
+      - "3000:3000"
+    volumes:
+      - "songskipper-grafana:/var/lib/grafana"
+      - "./docker/grafana-provisioning:/etc/grafana/provisioning:ro"
+
+  # logging
+  filebeat:
+    image: docker.elastic.co/beats/filebeat-oss:7.10.2
+    # enter your user-id or root
+    user: root
+    # disable strict permission checks
+    command: ["-e", "--strict.perms=false"]
+    volumes:
+      - ./docker/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    environment:
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - discovery.type=single-node
+      - cluster.name=songskipper-elasticsearch
+    volumes:
+      - songskipper-elasticsearch:/usr/share/elasticsearch/data
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.10.2
+    ports:
+      - "5601:5601"
+    environment:
+      - SERVER_NAME=songskipper-kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+
+volumes:
+  songskipper-postgresql:
+  songskipper-prometheus:
+  songskipper-grafana:
+  songskipper-elasticsearch:
+

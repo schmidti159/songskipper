@@ -23,3 +23,6 @@ spring:
             userNameAttribute: id
 server:
   forward-headers-strategy: NATIVE
+management:
+  endpoints.web.exposure.include: prometheus
+  metrics.tags.application: SongskipperBackend

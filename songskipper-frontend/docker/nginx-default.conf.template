@@ -1,8 +1,8 @@
 # get the original port (might be changed by docker)
 map $http_host $port {
-      default 80;
-      "~^[^\:]+:(?<p>\d+)$" $p;
-    }
+    default 80;
+    "~^[^\:]+:(?<p>\d+)$" $p;
+}
 server {
     listen       ${NGINX_PORT};
     listen  [::]:${NGINX_PORT};
@@ -22,7 +22,6 @@ server {
     location = /50x.html {
         root   /usr/share/nginx/html;
     }
-
 
     # proxy api / websockets to backend
     location ~* ^/(api|oauth2|login)/ {
@@ -49,5 +48,14 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
+    }
+}
+server {
+    # enable status endpoint
+    listen 8080;
+    access_log off;
+    error_log off;
+    location /metrics {
+        stub_status on;
     }
 }

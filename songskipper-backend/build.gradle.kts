@@ -19,6 +19,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	// h2 for testing
 	implementation("com.h2database:h2")
 	// postgres for prod
@@ -34,6 +35,8 @@ dependencies {
 	implementation("org.slf4j:slf4j-api")
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.3")
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
