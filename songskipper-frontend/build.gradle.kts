@@ -45,8 +45,10 @@ tasks.dockerPrepare {
     dependsOn(npmRunBuild.get(), tasks.processResources.get())
 }
 docker {
-    name = "songskipper/frontend:"+project.version
+    name = "ghcr.io/schmidti159/songskipper/frontend:${project.version}"
+
     setDockerfile(File("docker/Dockerfile"))
     files("build/resources/main", "docker/nginx-default.conf.template")
+
 }
 

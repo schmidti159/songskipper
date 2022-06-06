@@ -68,7 +68,8 @@ tasks.dockerPrepare {
 }
 
 docker {
-	name = "songskipper/backend:"+project.version
+	name = "ghcr.io/schmidti159/songskipper/backend:${project.version}"
+
 	setDockerfile(File("docker/Dockerfile"))
 	files("build/libs")
 	buildArgs(mapOf(Pair("BUILD_VERSION", project.version as String)))
