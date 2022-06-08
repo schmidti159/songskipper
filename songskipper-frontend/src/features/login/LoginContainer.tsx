@@ -8,7 +8,6 @@ interface LoginContainerProps {
 
 export default function LoginContainer(props: LoginContainerProps) {
   const { data: loggedIn, isLoading } = loginApi.useIsLoggedInQuery();
-
   if (isLoading) {
     // wait until the loginState is updated
     return (

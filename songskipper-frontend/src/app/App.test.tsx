@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router';
-import { render, screen } from '../test-utils';
+import { render, renderWithoutRouter, screen } from '../test-utils';
 import App from './App';
 
 describe('App-Container with routing-functionality', () => {
@@ -20,7 +20,7 @@ describe('App-Container with routing-functionality', () => {
   });
 
   test('renders skipRules page, when url is /rules', () => {
-    render(
+    renderWithoutRouter(
       <MemoryRouter initialEntries={["/rules"]}>
         <App />
       </MemoryRouter>
@@ -31,7 +31,7 @@ describe('App-Container with routing-functionality', () => {
 
 
   test('renders playlog page, when url is /log', () => {
-    render(
+    renderWithoutRouter(
       <MemoryRouter initialEntries={["/log"]}>
         <App />
       </MemoryRouter>
@@ -41,7 +41,7 @@ describe('App-Container with routing-functionality', () => {
   });
 
   test('no active page, when url is /something-random/foo', () => {
-    render(
+    renderWithoutRouter(
       <MemoryRouter initialEntries={["/something-random/foo"]}>
         <App />
       </MemoryRouter>

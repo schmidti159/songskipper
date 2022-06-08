@@ -1,7 +1,7 @@
 import HistoryIcon from '@mui/icons-material/History';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RuleIcon from '@mui/icons-material/Rule';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import CurrentlyPlayingPage from '../features/currentlyPlaying/CurrentlyPlayingPage';
 import PageFrame from '../features/frame/PageFrame';
 import PlayLog from '../features/playlog/PlayLogPage';
@@ -26,7 +26,7 @@ function App() {
         icon: <HistoryIcon />
       }
     ]}>
-      <Switch>
+      <Routes>
         <Route path="/rules">
           <SkipRules />
         </Route>
@@ -36,7 +36,7 @@ function App() {
         <Route path="/">
           <CurrentlyPlayingPage />
         </Route>
-      </Switch>
+      </Routes>
     </PageFrame>
   );
 }

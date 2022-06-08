@@ -1,7 +1,7 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import React from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { rulesApi } from '../../api/rulesApi';
 import { ConditionType, Rule, Track } from '../../common/types';
 import { descriptionForType, iconForType } from "./RuleCondition";
@@ -42,7 +42,7 @@ export default function CreateRuleFromTrackButton(props: CreateRuleFromTrackButt
   const conditionTypes: ConditionType[] = [
     'track', 'artist', 'album'
   ];
-  const history = useHistory();
+  const navigate = useNavigate();
   if (props.track == null) {
     return <></>;
   }
@@ -64,7 +64,7 @@ export default function CreateRuleFromTrackButton(props: CreateRuleFromTrackButt
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {conditionTypes.map(type => (
-          <MenuItem key={type} onClick={() => { createRule(ruleFromType(type, track)); history.push('/rules'); }}>
+          <MenuItem key={type} onClick={() => { createRule(ruleFromType(type, track)); navigate('/rules'); }}>
             {iconForType(type)}
             <Typography variant="body1" component="p" sx={{ m: 1, marginLeft: 0 }}>
               Create rule from {descriptionForType(type)}

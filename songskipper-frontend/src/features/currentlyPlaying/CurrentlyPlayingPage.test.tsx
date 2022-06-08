@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { act } from 'react-dom/test-utils';
+import { TextDecoder, TextEncoder } from 'util';
 import { api } from '../../api/api';
 import { store } from '../../app/store';
 import { Track } from '../../common/types';
@@ -55,14 +56,20 @@ describe('CurrentlyPlayingPage', () => {
     rest.get('/api/skipper/v1/stop', (req, res, ctx) => {
       return res(ctx.status(200));
     }),
+    rest.get('/ws/*', (req, res, ctx) => {
+      return res(ctx.status(200));
+    }),
   );
 
   beforeAll(() => {
+    global.TextEncoder = TextEncoder;
+    // @ts-ignore this assignment is not type safe, but it is only needed for tests anyway
+    global.TextDecoder = TextDecoder;
     server.listen();
   });
   afterEach(() => {
     server.resetHandlers();
-    store.dispatch(api.util.resetApiState());
+    act(() => { store.dispatch(api.util.resetApiState()); });
   });
   afterAll(() => {
     server.close();
@@ -157,7 +164,7 @@ describe('CurrentlyPlayingPage', () => {
   });
   describe('PlayerControlButtons', () => {
     test('PlayerControlButtons can skip forward, backward and pause if a track is playing', async () => {
-      render(<PlayerControlButtons noTrack={false} isPaused={false} />);
+      act(() => { render(<PlayerControlButtons noTrack={false} isPaused={false} />); });
 
       const buttons = screen.getAllByRole('button');
       expect(buttons).toHaveLength(3);

@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
-	id("org.springframework.boot") version "2.5.3"
+	id("org.springframework.boot") version "2.7.0"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.5.21"
 	kotlin("plugin.spring") version "1.5.21"
@@ -30,11 +30,11 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0")
-	implementation("se.michaelthelin.spotify:spotify-web-api-java:7.0.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1")
+	implementation("se.michaelthelin.spotify:spotify-web-api-java:7.1.0")
 	implementation("org.slf4j:slf4j-api")
 	implementation("org.liquibase:liquibase-core")
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.3")
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.8")
 	implementation("io.micrometer:micrometer-registry-prometheus")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -45,7 +45,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.RequiresOptIn")
-		jvmTarget = "11"
+		jvmTarget = "17"
 	}
 }
 

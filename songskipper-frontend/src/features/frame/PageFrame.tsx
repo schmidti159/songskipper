@@ -10,7 +10,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
@@ -152,13 +152,13 @@ export default function PageFrame(props: PageFrameProps) {
         <Divider />
         <List>
           {props.links.map((link, i) =>
-            <ListItem button component={NavLink} key={i.toString()}
-              to={link.path} activeClassName="Mui-selected" exact>
+            <ListItemButton component={NavLink} key={i.toString()}
+              to={link.path}>
               <ListItemIcon>
                 {link.icon}
               </ListItemIcon>
               <ListItemText primary={link.title} />
-            </ListItem>
+            </ListItemButton>
           )}
         </List>
       </Drawer>
