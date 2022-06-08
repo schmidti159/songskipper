@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM eclipse-temurin:17-alpine
 ARG BUILD_VERSION
 ADD songskipper-backend-${BUILD_VERSION}.jar /usr/songskipper/songskipper-backend.jar
 WORKDIR /usr/songskipper
