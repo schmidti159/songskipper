@@ -1,8 +1,7 @@
 name: CI
 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
+  pull_request:
     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -17,13 +16,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Log in to the GitHub Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check out
         uses: actions/checkout@v2
 
@@ -36,7 +28,7 @@ jobs:
       - name: make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: ./gradlew build docker dockerPush
+      - name: ./gradlew build docker
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build docker dockerPush
+          arguments: build docker

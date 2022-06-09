@@ -5,7 +5,7 @@ import de.adschmidt.songskipper.backend.TestConfig.Companion.USER_ID
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUserModel
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import de.adschmidt.songskipper.backend.services.UserService
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -43,7 +43,7 @@ internal class PlayLogApiIntegrationTest(
 
     @Test
     fun `getRecentTracks() returns the recent tracks returned from spotify stub`() {
-        runBlockingTest {
+        runTest {
             // arrange = use SpotifyServiceStub instead of SpotifyService
             val formatter = DateFormat.getDateTimeInstance(
                 DateFormat.SHORT, DateFormat.SHORT

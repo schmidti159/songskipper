@@ -2,11 +2,11 @@ package de.adschmidt.songskipper.backend.api
 
 import de.adschmidt.songskipper.backend.SkipperTest
 import de.adschmidt.songskipper.backend.TestConfig.Companion.USER_ID
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
@@ -22,7 +22,7 @@ internal class PublicUserApiIntegrationTest(
 
     @Test
     fun `user id is returned when user is logged in`() {
-        runBlockingTest {
+        runTest {
             val principal = mock(Authentication::class.java)
             `when`(principal.name).thenReturn(USER_ID)
             SecurityContextHolder.setContext(SecurityContextImpl(principal))
@@ -32,7 +32,7 @@ internal class PublicUserApiIntegrationTest(
 
     @Test
     fun `empty string is returned if user is not logged in`() {
-        runBlockingTest {
+        runTest {
             assertThat(publicUserApi.getUserId()).isEqualTo("")
         }
     }

@@ -7,7 +7,7 @@ import de.adschmidt.songskipper.backend.persistence.repo.RuleRepo
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import de.adschmidt.songskipper.backend.services.RuleService
 import de.adschmidt.songskipper.backend.services.UserService
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -50,7 +50,7 @@ internal class RuleApiIntegrationTest(
 
     @Test
     fun `rules can be added, modified and deleted`() {
-        runBlockingTest {
+        runTest {
             val fooRule = ruleApi.addRule(Rule(titleExpression = "fooRule"))
             assertThat(fooRule.titleExpression)
                 .isEqualTo("fooRule")
