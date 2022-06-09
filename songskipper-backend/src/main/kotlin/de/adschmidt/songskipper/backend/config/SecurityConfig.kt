@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -24,11 +24,9 @@ class SecurityConfig {
     @Configuration
     @Order(1)
     @Profile("dev")
-    class H2ConsoleSecurityConfig : WebSecurityConfigurerAdapter() {
-        //        override fun configure(web: WebSecurity) {
-//            web.ignoring().antMatchers("/h2/**")
-//        }
-        override fun configure(http: HttpSecurity?) {
+    class H2ConsoleSecurityConfig {
+        @Bean
+        fun filterChain(http: HttpSecurity): SecurityFilterChain? {
             http {
                 securityMatcher("/h2/**")
                 authorizeRequests {
@@ -44,22 +42,22 @@ class SecurityConfig {
                     }
                 }
             }
+            return http.build()
         }
     }
 
     @Configuration
     class DefaultSecurityConfig(
-        val spotifyUserUpdateFilter : SpotifyUserUpdateFilter
-    ) : WebSecurityConfigurerAdapter() {
-
-        override fun configure(http: HttpSecurity?) {
+        val spotifyUserUpdateFilter: SpotifyUserUpdateFilter
+    ) {
+        @Bean
+        fun filterChain(http: HttpSecurity): SecurityFilterChain? {
             http {
                 oauth2Login { }
                 authorizeRequests {
                     authorize("/api/public/**", permitAll)
                     authorize("/api/**", authenticated)
                     authorize(anyRequest, permitAll)
-//                    authorize(anyRequest, permitAll)
                 }
                 csrf {
                     disable()
@@ -69,6 +67,7 @@ class SecurityConfig {
                     disable()
                 }
             }
+            return http.build()
         }
 
         @Bean

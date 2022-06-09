@@ -5,7 +5,7 @@ import de.adschmidt.songskipper.backend.TestConfig.Companion.USER_ID
 import de.adschmidt.songskipper.backend.persistence.model.SpotifyUserModel
 import de.adschmidt.songskipper.backend.persistence.repo.SpotifyUserRepo
 import de.adschmidt.songskipper.backend.services.UserService
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -41,7 +41,7 @@ internal class SkipperApiIntegrationTest(
 
     @Test
     fun `skipper can be stopped and started`() {
-        runBlockingTest {
+        runTest {
             // default: Skipping is active
             assertThat(skipperApi.active()).isTrue
             // no change
